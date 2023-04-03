@@ -15,7 +15,7 @@ if __name__ == '__main__':
     # 设置编译参数和选项
     options = [
         '--onefile',  # 打包成单个可执行文件
-        # '--noconsole',  # 不显示控制台窗口
+        '--noconsole',  # 不显示控制台窗口
         '--clean',  # 清理临时文件
         '--name={}'.format("ThreeWords"),  # 指定生成的可执行文件名称
         '--distpath={}'.format(performable_path),  # 指定生成的可执行文件路径
