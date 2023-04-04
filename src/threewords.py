@@ -41,8 +41,14 @@ else:
     # 否则，从 __file__ 中获取当前文件的路径，并取其所在目录作为当前目录
     CUR_PATH = os.path.dirname(os.path.abspath(__file__))
 
-
+# 根目录
 ROOT_PATH = os.path.dirname(CUR_PATH)
+
+# 是否是release版本
+__VERSION__ = "DEBUG"
+
+sys.path.append(ROOT_PATH)
+from src.util.file_tool import delete_file_or_folder
 
 
 # Location of the desktop background image folder
@@ -148,6 +154,11 @@ def is_first_or_zero():
 def set_start_file():
     # Set the destination folder for the shortcut
     dst_folder = r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup'
+     # 创建运行时需要的文件夹
+    new_folder = [ROOT_PATH+ r'\temp', ROOT_PATH+ r'\logs']
+    for folder in new_folder:
+        delete_file_or_folder(folder)
+        os.mkdir(folder)
 
     # Create a VBS script to run the ThreeWords program
     vbs_file = ROOT_PATH + "\\temp\\StartThreeWords.vbs"
@@ -155,10 +166,6 @@ def set_start_file():
         vbs_run = "ThreeWords.exe"
     else:
         vbs_run = "python {} 2>null".format("ThreeWords.py")
-    
-    print(FROZEN)
-    print(vbs_run)
-
 
     with open(vbs_file, "w") as f:
         f.write('Dim shell\n')
@@ -205,7 +212,7 @@ def config_init():
 
     # If it is the first time using the program and the user has set the program to start with the system,
     # set the start file and change the FIRST_USE value in the configuration file to False
-    if FIRST_USE.lower() == 'true' and START_WITH_SYSTEM.lower() == 'true':
+    if START_WITH_SYSTEM.lower() == 'true':
         set_start_file()
         with open(configfile, 'r', encoding=encoding) as file:
             content = file.read()
@@ -308,8 +315,8 @@ class MyWindowClass:
 
 if __name__ == "__main__":
     # 隐藏主窗口
-    hwnd = MyWindowClass().create_window()
-    win32gui.ShowWindow(hwnd, win32con.SW_HIDE)
+    # hwnd = MyWindowClass().create_window()
+    # win32gui.ShowWindow(hwnd, win32con.SW_HIDE)
 
     # 创建一个线程用于执行系统托盘
     systray_thread = threading.Thread(target=systray_init)
@@ -322,4 +329,4 @@ if __name__ == "__main__":
     systray_thread.join()
 
     # 退出应用程序时关闭主窗口
-    win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
+    # win32gui.PostMessage(hwnd, win32con.WM_CLOSE, 0, 0)
