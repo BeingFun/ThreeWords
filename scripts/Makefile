@@ -2,17 +2,16 @@ MAKE := python
 all:
 	$(MAKE) build.py && $(MAKE) deploy.py
 compile:
-	$(MAKE) build.py
+	$(MAKE) clr_compile.py && $(MAKE) build.py
 deploy:
-	$(MAKE) deploy.py
+	$(MAKE) clr_package.py && $(MAKE) deploy.py
 clr_all:
-	$(MAKE) clr_compile.py && $(MAKE) clr_package.py && clr_running.py
+	$(MAKE) clr_compile.py && $(MAKE) clr_package.py && $(MAKE) clr_running.py
 clr_compile:
 	$(MAKE) clr_compile.py
 clr_package:
 	$(MAKE) clr_package.py
 clr_running:
-	$(MAKE) clr_running.py # TODO 清理运行时文件
+	$(MAKE) clr_running.py
 test:
-	$(MAKE) test.py
-
+	$(MAKE) test.py # TODO

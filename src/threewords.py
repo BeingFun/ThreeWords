@@ -1,59 +1,23 @@
 import ctypes
+import datetime
+import os
 import random
 import shutil
-import os
-import sys
-from PIL import Image, ImageDraw, ImageFont
 import subprocess
-import psutil
-import datetime
-import time
-import configparser
-import chardet
-import winshell
-import pystray
-import win32gui
-import win32con
 import threading
-import win32api
+import time
 import tkinter as tk
-import pystray
 from datetime import datetime
 
+import psutil
+import pystray
+import win32api
+import win32con
+import win32gui
+from PIL import Image, ImageDraw, ImageFont
 
-# Set the system desktop background
-SPI_SETDESKWALLPAPER = 20
-
-# Whether to start with the system
-START_WITH_SYSTEM = False
-
-# Font color
-COLOR = (250, 250, 250)
-
-# 是否为可执行文件
-FROZEN = getattr(sys, 'frozen', False)
-
-# 获取当前文件所在目录的路径
-if FROZEN:
-    # 如果是可执行文件，则用 compass 获取可执行文件的目录
-    CUR_PATH = os.path.dirname(os.path.abspath(sys.executable))
-else:
-    # 否则，从 __file__ 中获取当前文件的路径，并取其所在目录作为当前目录
-    CUR_PATH = os.path.dirname(os.path.abspath(__file__))
-
-# 根目录
-ROOT_PATH = os.path.dirname(CUR_PATH)
-
-# 是否是release版本
-__VERSION__ = "DEBUG"
-
-sys.path.append(ROOT_PATH)
-from src.util.file_tool import delete_file_or_folder
-
-
-# Location of the desktop background image folder
-BACKGROUD_IMAGES_PATH = ROOT_PATH + "\\images\\origin_images"
-NEW_IMAGES_PATH = ROOT_PATH + "\\images\\new_images"
+from constants.constants import ROOT_PATH, CustomConfig, Constants
+from src.set_start_file import set_start_file
 
 
 # This function is used to get the text from a nodejs script
@@ -94,28 +58,30 @@ def get_text():
     # Return the dictionary
     return dic_info
 
+
 # This function adds text to an image
-
-
 def add_text(dic_info):
     # Get the image from the NEW_IMAGES_PATH directory
-    image_name = os.listdir(NEW_IMAGES_PATH)[0]
-    image_file = NEW_IMAGES_PATH + "\\" + image_name
+    image_name = os.listdir(Constants.NEW_IMAGES_PATH)[0]
+    image_file = Constants.NEW_IMAGES_PATH + "\\" + image_name
     image = Image.open(image_file)
     draw = ImageDraw.Draw(image)
     # Set font type and size
-    font = ImageFont.truetype("simkai.ttf", 72)
+    font = ImageFont.truetype(CustomConfig.FONT_SETTING.FONT_TYPE.lower(), CustomConfig.FONT_SETTING.FONT_SIZE)
     # Get text from dictionary
     text = dic_info["hitokoto"]
-    color = (250, 250, 250)
-    # Get size of text
-    text_bbox = draw.textbbox((0, 0), text, font=font)
-    text_size = (text_bbox[2] - text_bbox[0], text_bbox[3] - text_bbox[1])
-    # Calculate x and y coordinates for centering the text
-    x = (image.width - text_size[0]) / 2
-    y = (image.height - text_size[1]) / 2 - image.height * 0.10
+    if CustomConfig.FONT_SETTING.TEXT_POSITION == (-1, -1):
+        # Get size of text
+        text_bbox = draw.textbbox((0, 0), text, font=font)
+        text_size = (text_bbox[2] - text_bbox[0], text_bbox[3] - text_bbox[1])
+        # Calculate x and y coordinates for centering the text
+        x = (image.width - text_size[0]) / 2
+        y = (image.height - text_size[1]) / 2 - image.height * 0.10
+    else:
+        x = CustomConfig.FONT_SETTING.TEXT_POSITION[0]
+        y = CustomConfig.FONT_SETTING.TEXT_POSITION[1]
     # Draw the text on the image
-    draw.text((x, y), text, fill=color, font=font)
+    draw.text((x, y), text, fill=CustomConfig.FONT_SETTING.FONT_COLOR, font=font)
     # Save the image with the added text
     image.save(image_file)
 
@@ -123,20 +89,20 @@ def add_text(dic_info):
 # This function sets the background of the desktop to the first image in the NEW_IMAGES_PATH directory
 def set_backgroud():
     # Get the path of the first image in the directory
-    image_path = NEW_IMAGES_PATH + "\\" + os.listdir(NEW_IMAGES_PATH)[0]
+    image_path = Constants.NEW_IMAGES_PATH + "\\" + os.listdir(Constants.NEW_IMAGES_PATH)[0]
     # Set the desktop background to the image path
     ctypes.windll.user32.SystemParametersInfoW(
-        SPI_SETDESKWALLPAPER, 0, image_path, 3)
+        Constants.SPI_SETDESKWALLPAPER, 0, image_path, 3)
 
 
 def copy_images():
     # Select a random image from the original image set
-    images = os.listdir(BACKGROUD_IMAGES_PATH)
+    images = os.listdir(CustomConfig.IMAGE_SETTING.BACKGROUND_IMAGES_PATH)
     random_image = images[random.randint(0, len(images) - 1)]
     new_image = "new_image." + random_image.split(".")[1]
     # Copy the random image to the new image set folder
-    src_path = BACKGROUD_IMAGES_PATH + "\\" + random_image
-    dst_path = NEW_IMAGES_PATH + "\\" + new_image
+    src_path = CustomConfig.IMAGE_SETTING.BACKGROUND_IMAGES_PATH + "\\" + random_image
+    dst_path = Constants.NEW_IMAGES_PATH + "\\" + new_image
     shutil.copy2(src_path, dst_path)
 
 
@@ -150,81 +116,13 @@ def is_first_or_zero():
     return True if (first_flag or zero_flag) else False
 
 
-# This function sets the start file for the ThreeWords program
-def set_start_file():
-    # Set the destination folder for the shortcut
-    dst_folder = r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup'
-     # 创建运行时需要的文件夹
-    new_folder = [ROOT_PATH+ r'\temp', ROOT_PATH+ r'\logs']
-    for folder in new_folder:
-        delete_file_or_folder(folder)
-        os.mkdir(folder)
 
-    # Create a VBS script to run the ThreeWords program
-    vbs_file = ROOT_PATH + "\\temp\\StartThreeWords.vbs"
-    if FROZEN:
-        vbs_run = "ThreeWords.exe"
-    else:
-        vbs_run = "python {} 2>null".format("ThreeWords.py")
-
-    with open(vbs_file, "w") as f:
-        f.write('Dim shell\n')
-        f.write('Set shell = CreateObject("WScript.Shell")\n')
-        f.write('shell.CurrentDirectory = "{}"\n'.format(CUR_PATH))
-        f.write('shell.Run "{}", 0, True'.format(vbs_run))
-
-    # Get the source file and shortcut path
-    source_file = vbs_file
-    shortcut_path = ROOT_PATH + "\\temp\\StartThreeWords.lnk"
-    ico_path = ROOT_PATH + "\\resources\\threewords.ico"
-    # Create a shortcut for the VBS script
-    winshell.CreateShortcut(
-        Path=shortcut_path,
-        Target=source_file,
-        Icon=(ico_path, 0),
-        Description='Three Words shortcut'
-    )
-
-    # Copy the shortcut to the destination folder
-    shutil.copy(shortcut_path, dst_folder)
-
-
-def config_init():
-    # Read the configuration file information
-    config = configparser.ConfigParser(allow_no_value=False)
-    config.optionxform = lambda option: option
-    # Read the content of the file and use the chardet module to detect the encoding format
-    configfile = ROOT_PATH + "\\config\\config.ini"
-    with open(configfile, 'rb') as file:
-        content = file.read()
-        encoding = chardet.detect(content)['encoding']
-
-    # Reopen the file using the detected encoding format and read the content
-    with open(configfile, encoding=encoding) as file:
-        config.read_file(file)
-
-    # Get the configuration information from the file
-    START_WITH_SYSTEM = config.get('BASIC_CONFIG', 'START_WITH_SYSTEM')
-    BACKGROUD_IMAGES_PATH = config.get('BASIC_CONFIG', 'BACKGROUD_IMAGES_PATH')
-    COLOR = config.get('BASIC_CONFIG', 'COLOR')
-    TEXT_POSITION = config.get('BASIC_CONFIG', 'TEXT_POSITION')
-    FIRST_USE = config.get('BASIC_CONFIG', 'FIRST_USE')
-
-    # If it is the first time using the program and the user has set the program to start with the system,
-    # set the start file and change the FIRST_USE value in the configuration file to False
-    if START_WITH_SYSTEM.lower() == 'true':
-        set_start_file()
-        with open(configfile, 'r', encoding=encoding) as file:
-            content = file.read()
-        content = content.replace('FIRST_USE = True', 'FIRST_USE = False')
-        with open(configfile, 'w', encoding=encoding) as file:
-            file.write(content)
 
 
 def systray_init():
     print("start systray_init")
     # 获取图标文件的路径
-    icon_path = os.path.join(ROOT_PATH, "resources", "threewords.ico")
+    icon_path = os.path.join(ROOT_PATH, "resources", "ico", "threewords.ico")
     icon = Image.open(icon_path)
 
     # 定义托盘菜单
@@ -268,15 +166,20 @@ def show_about():
 def threewords():
     import pythoncom
     pythoncom.CoInitialize()
-
     print("start threewords")
-    config_init()
+
+    if CustomConfig.BASIC_SETTING.START_WITH_SYSTEM:
+        try:
+            set_start_file()
+        except:
+            print("随系统开机自启设置失败")
+
     while True:
         dic_info = get_text()
         copy_images()
         add_text(dic_info)
         set_backgroud()
-        time.sleep(3600)
+        time.sleep(CustomConfig.BASIC_SETTING.TEXT_UPDATE_INTERVAL)
 
 # 定义窗口类
 
