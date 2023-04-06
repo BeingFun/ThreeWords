@@ -38,4 +38,3 @@ class ConfigInit:
         #     custom_config[k] = dict(v)
         # return custom_config
         return config
-

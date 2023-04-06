@@ -1,6 +1,5 @@
 import os
 from constants.constants import ROOT_PATH
-from src.util.file_tool import FileTool
 
 
 new_image = ROOT_PATH + r'\images\new_images'

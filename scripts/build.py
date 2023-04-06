@@ -13,7 +13,7 @@ if __name__ == '__main__':
     icon_file_path = ROOT_PATH + r'\resources\\ico\\threewords.ico'
     work_path = CUR_PATH + r'\threewords_build'
     # 创建运行时需要的文件夹
-    new_folder = [ROOT_PATH+ r'\temp', ROOT_PATH+ r'\logs']
+    new_folder = [ROOT_PATH + r'\temp', ROOT_PATH + r'\logs']
 
     for folder in new_folder:
         FileTool.delete_file_or_folder(folder)
@@ -31,8 +31,8 @@ if __name__ == '__main__':
         '--workpath={}'.format(work_path)  # 指定build 文件夹路径
     ]
 
-    if "RELEASE" == Constants.VERSION:
-        options.append("--noconsole") # 不显示控制台窗口
+    if "release" == Constants.VERSION:
+        options.append("--noconsole")  # 不显示控制台窗口
 
     print(options)
     # 运行 PyInstaller

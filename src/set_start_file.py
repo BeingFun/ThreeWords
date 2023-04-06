@@ -27,7 +27,7 @@ def set_start_file():
     dst_file = dst_folder + r'\ThreeWords.lnk'
     # 如果启动项已经存在则返回
     if os.path.exists(dst_file):
-        return 
+        return
     # Create a VBS script to run the ThreeWords program
     vbs_file = Constants.ROOT_PATH + "\\temp\\StartThreeWords.vbs"
     FileTool.make_file_s(vbs_file)

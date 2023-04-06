@@ -1,6 +1,7 @@
 import shutil
 import os
 
+
 class FileTool:
     # 安全删除文件
     @staticmethod

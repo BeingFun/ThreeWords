@@ -21,8 +21,8 @@ ROOT_PATH = os.path.dirname(CUR_PATH)
 class Constants:
     # 工程根目录
     ROOT_PATH = ROOT_PATH
-    # 是否是release版本
-    VERSION = "DEBUG"
+    # 是否是 release 版本
+    VERSION = "release"
     # 是否为可执行文件
     FROZEN = FROZEN
     # 默认背景
