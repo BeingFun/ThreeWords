@@ -2,8 +2,8 @@ import os
 import shutil
 import winshell
 from constants.constants import Constants
-from src.util.func_tool import run_as_admin
-from src.util.file_tool import FileTool
+from src.util.file_tools import FileTools
+from src.util.func_tools import FuncTools
 
 
 # 是否为可执行文件
@@ -20,7 +20,7 @@ else:
     CUR_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
-@run_as_admin
+@FuncTools.run_as_admin
 def set_start_file():
     # Set the destination folder for the shortcut
     dst_folder = r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup'
@@ -30,7 +30,7 @@ def set_start_file():
         return
     # Create a VBS script to run the ThreeWords program
     vbs_file = Constants.ROOT_PATH + "\\temp\\StartThreeWords.vbs"
-    FileTool.make_file_s(vbs_file)
+    FileTools.make_file_s(vbs_file)
     if Constants.FROZEN:
         vbs_run = "ThreeWords.exe"
     else:

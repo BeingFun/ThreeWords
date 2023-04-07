@@ -1,6 +1,6 @@
 import os
 from constants.constants import ROOT_PATH
-from src.util.file_tool import FileTool
+from src.util.file_tools import FileTools
 
 
 CUR_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -14,4 +14,4 @@ files_list = [build_path, spec_path,
               bin_path, temp_path, logs_path]
 
 for path in files_list:
-    FileTool.delete_file_or_folder(path)
+    FileTools.delete_file_or_folder(path)

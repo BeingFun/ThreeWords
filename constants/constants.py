@@ -28,9 +28,18 @@ class Constants:
     # 默认背景
     DEFAULT_BACKGROUD = ROOT_PATH + r'\resources\default'
     # 添加文字后的图片位置
-    NEW_IMAGES_PATH = ROOT_PATH + "\\images\\new_images"
+    NEW_IMAGES_PATH = ROOT_PATH + "\\images"
     # Set the system desktop background
     SPI_SETDESKWALLPAPER = 20
+    # 网页请求配置
+    # 设置请求头，模拟浏览器行为
+    HEADERS = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+        'Accept': 'application/json'}
+    # 域名
+    URL = 'https://v1.hitokoto.cn/'
+    # 最大重试请求次数
+    MAX_RETRIES = 3
 
 
 class CustomConfig:
@@ -48,9 +57,9 @@ class CustomConfig:
     # IMAGE_SETTING
     __image_path = __custom_config['IMAGE_SETTING'].get('BACKGROUND_IMAGES_PATH')
     if __image_path == 'Default':
-        IMAGE_SETTING =  __IMAGE_SETTING(Constants.DEFAULT_BACKGROUD)  
+        IMAGE_SETTING = __IMAGE_SETTING(Constants.DEFAULT_BACKGROUD)
     else:
-        IMAGE_SETTING =  __IMAGE_SETTING(__image_path)
+        IMAGE_SETTING = __IMAGE_SETTING(__image_path)
     # FONT_SETTING
     __color = tuple(map(int, __custom_config['FONT_SETTING'].get('FONT_COLOR').strip('()').replace(' ', '').split(',')))
     __position = tuple(map(int, __custom_config['FONT_SETTING'].get('TEXT_POSITION').strip('()').replace(' ', '').split(',')))

@@ -4,6 +4,7 @@ import subprocess
 import tkinter as tk
 import pystray
 from PIL import Image
+import pythoncom
 
 
 from constants.constants import ROOT_PATH
@@ -46,6 +47,7 @@ class Systray:
 
     def run(self):
         print("start systray thread")
+        pythoncom.CoInitialize()
         self.tray.run()
 
     def __show_about(self):
