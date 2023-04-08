@@ -22,16 +22,29 @@ class Systray:
         self.tray = pystray.Icon("ThreeWords", icon=icon)
         menu = pystray.Menu(
             pystray.MenuItem(
-                "显示主窗口",
+                "开启图片刷新",
                 self.__show_main  # TODO
             ),
             pystray.MenuItem(
-                "刷新文字",
+                "开启文字刷新",
+                self.__show_main  # TODO
+            ),
+            pystray.Menu.SEPARATOR,
+            pystray.MenuItem(
+                "立即刷新文字",
                 self.__refresh_text  # TODO
             ),
             pystray.MenuItem(
-                "设置",
-                self.__show_setting
+                "立即刷新图片",
+                self.__refresh_text  # TODO
+            ),
+            pystray.MenuItem(
+                "立即刷新全部",
+                self.__refresh_text  # TODO
+            ),
+            pystray.MenuItem(
+                "显示主窗口",
+                self.__show_main  # TODO
             ),
             pystray.MenuItem(
                 "关于",
@@ -42,6 +55,7 @@ class Systray:
                 self.tray.stop
             )
         )
+
         self.tray.menu = menu
         print("Systray init finish")
 

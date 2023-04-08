@@ -19,13 +19,10 @@ ROOT_PATH = os.path.dirname(CUR_PATH)
 
 class ConfigInit:
     @staticmethod
-    def config_init():
+    def config_init() -> dict:
         # Read the configuration file information
         config = configparser.ConfigParser(allow_no_value=False)
-        config.optionxform = lambda option: option
-        # Read the content of the file and use the chardet module to detect the encoding format
         configfile = ROOT_PATH + "\\config\\config.ini"
-
         with open(configfile, 'rb') as file:
             content = file.read()
             encoding = chardet.detect(content)['encoding']
@@ -33,8 +30,6 @@ class ConfigInit:
         # Reopen the file using the detected encoding format and read the content
         with open(configfile, encoding=encoding) as file:
             config.read_file(file)
-        # custom_config = {}
-        # for k, v in config.items():
-        #     custom_config[k] = dict(v)
-        # return custom_config
-        return config
+
+        # bug cant remove default section
+        return dict(config)

@@ -1,4 +1,6 @@
 import os
+import sys
+
 import shutil
 import winshell
 from constants.constants import Constants
@@ -7,8 +9,6 @@ from src.util.func_tools import FuncTools
 
 
 # 是否为可执行文件
-import sys
-
 FROZEN = getattr(sys, 'frozen', False)
 
 # 获取当前文件所在目录的路径
@@ -29,7 +29,7 @@ def set_start_file():
     if os.path.exists(dst_file):
         return
     # Create a VBS script to run the ThreeWords program
-    vbs_file = Constants.ROOT_PATH + "\\temp\\StartThreeWords.vbs"
+    vbs_file = Constants.ROOT_PATH + r'\temp\StartThreeWords.vbs'
     FileTools.make_file_s(vbs_file)
     if Constants.FROZEN:
         vbs_run = "ThreeWords.exe"
@@ -44,8 +44,8 @@ def set_start_file():
 
     # Get the source file and shortcut path
     source_file = vbs_file
-    shortcut_path = Constants.ROOT_PATH + "\\temp\\StartThreeWords.lnk"
-    ico_path = Constants.ROOT_PATH + "\\resources\\ico\\threewords.ico"
+    shortcut_path = Constants.ROOT_PATH + r'\temp\StartThreeWords.lnk'
+    ico_path = Constants.ROOT_PATH + r'\resources\ico\threewords.ico'
     # Create a shortcut for the VBS script
     winshell.CreateShortcut(
         Path=shortcut_path,
