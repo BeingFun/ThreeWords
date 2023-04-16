@@ -12,7 +12,7 @@ if __name__ == '__main__':
     package_folder = "ThreeWords"
     need_copy_folder = ['bin', 'config', 'resources']
     need_copy_file = ['readme.md', 'changelog.md']
-    new_folder = ['temp', 'logs', 'images']
+    new_folder = ['logs', 'images']
     need_clean_folder = list(new_folder)
     need_clean_folder.append(package_folder)
 

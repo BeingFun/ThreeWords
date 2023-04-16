@@ -11,7 +11,7 @@
 下载压缩包后解压即可使用，可执行程序位于:
 ThreeWords\bin\ThreeWords.exe
 
-双击即可运行，若开启随系统开机自启功能，请右键ThreeWords.exe 以管理员身份运行。
+双击即可运行，若开启随系统开机自启功能，请右键ThreeWords.exe 以管理员身份运行
 
 用户自定义配置文件位于:
 ThreeWords\config\config.ini
