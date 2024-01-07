@@ -1,19 +1,19 @@
 import sys
 import os
 from src.util.file_tools import FileTools
-from constants.constants import ROOT_PATH, Constants
+from constants.constants import Constants
 from PyInstaller.__main__ import run
 
 CUR_PATH = os.path.dirname(os.path.abspath(__file__))
 
-
 if __name__ == '__main__':
-    threewords_path = ROOT_PATH + r'\src\\threewords.py'
-    performable_path = ROOT_PATH + r'\bin'
-    icon_file_path = ROOT_PATH + r'\resources\\ico\\threewords.ico'
+    version = "release"
+    threewords_path = Constants.ROOT_PATH + r'\src\\ThreeWords.py'
+    performable_path = Constants.ROOT_PATH + r'\bin'
+    icon_file_path = Constants.ROOT_PATH + r'\resources\\ico\\threewords.ico'
     work_path = CUR_PATH + r'\threewords_build'
     # 创建运行时需要的文件夹
-    new_folder = [ROOT_PATH + r'\temp', ROOT_PATH + r'\logs']
+    new_folder = [Constants.ROOT_PATH + r'\logs']
 
     for folder in new_folder:
         FileTools.delete_file_or_folder(folder)
@@ -31,7 +31,7 @@ if __name__ == '__main__':
         '--workpath={}'.format(work_path)  # 指定build 文件夹路径
     ]
 
-    if "release" == Constants.VERSION:
+    if "release" == version:
         options.append("--noconsole")  # 不显示控制台窗口
 
     print(options)

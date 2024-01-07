@@ -1,8 +1,8 @@
 import os
-from constants.constants import ROOT_PATH
+from constants.constants import Constants
 
 
-new_image = ROOT_PATH + r'\images'
+new_image = Constants.ROOT_PATH + r'\images'
 for filename in os.listdir(new_image):
     file_path = os.path.join(new_image, filename)
     try:

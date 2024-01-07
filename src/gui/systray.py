@@ -7,7 +7,7 @@ from PIL import Image
 import pythoncom
 import webbrowser
 
-from constants.constants import ROOT_PATH, Constants
+from constants.constants import Constants
 
 
 class Systray:
@@ -15,7 +15,7 @@ class Systray:
         print("Systray init")
         # 获取图标文件的路径
         icon_path = os.path.join(
-            ROOT_PATH, "resources", "ico", "threewords.ico")
+            Constants.ROOT_PATH, "resources", "ico", "threewords.ico")
         icon = Image.open(icon_path)
 
         # 定义托盘菜单
@@ -92,7 +92,7 @@ class Systray:
 
         def handlerAdaptor(func, **kwds):
             '''事件处理函数的适配器'''
-            return lambda event, fun = func, kwds=kwds: fun(event, **kwds)
+            return lambda event, fun=func, kwds=kwds: fun(event, **kwds)
 
         # 鼠标指向 光标样式
         def show_hand_cursor(event):
@@ -122,7 +122,7 @@ class Systray:
 
     def __show_setting(self):
         # 配置文件路径
-        config_path = os.path.join(ROOT_PATH, 'config', 'config.ini')
+        config_path = os.path.join(Constants.ROOT_PATH, 'config', 'config.ini')
         # 调用记事本打开配置文件
         subprocess.Popen(['notepad.exe', config_path])
 

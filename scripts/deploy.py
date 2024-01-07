@@ -4,8 +4,7 @@ import shutil
 import zipfile
 
 from src.util.file_tools import FileTools
-from constants.constants import ROOT_PATH
-
+from constants.constants import Constants
 
 if __name__ == '__main__':
     # 创建package_folder
@@ -17,7 +16,7 @@ if __name__ == '__main__':
     need_clean_folder.append(package_folder)
 
     # 切换到根目录
-    os.chdir(ROOT_PATH)
+    os.chdir(Constants.ROOT_PATH)
     # 检查文件夹是否存在
     for folder in need_clean_folder:
         FileTools.delete_file_or_folder(folder)
