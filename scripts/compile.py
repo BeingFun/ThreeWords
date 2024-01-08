@@ -8,7 +8,7 @@ CUR_PATH = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
     version = "release"
-    threewords_path = Constants.ROOT_PATH + r'\src\\ThreeWords.py'
+    threewords_path = Constants.ROOT_PATH + r'\src\\main.py'
     performable_path = Constants.ROOT_PATH + r'\bin'
     icon_file_path = Constants.ROOT_PATH + r'\resources\\ico\\threewords.ico'
     work_path = CUR_PATH + r'\threewords_build'

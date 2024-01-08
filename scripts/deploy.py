@@ -3,27 +3,27 @@ import shutil
 
 import zipfile
 
-from src.util.file_tools import FileTools
 from constants.constants import Constants
 
 if __name__ == '__main__':
     # 创建package_folder
     package_folder = "ThreeWords"
-    need_copy_folder = ['bin', 'config', 'resources']
+    need_copy_folder = ['bin', 'config', 'resources', 'images']
     need_copy_file = ['readme.md', 'changelog.md']
-    new_folder = ['logs', 'images']
-    need_clean_folder = list(new_folder)
-    need_clean_folder.append(package_folder)
+    new_folder = ['logs']
+    need_clean_folder = ['images']
 
     # 切换到根目录
     os.chdir(Constants.ROOT_PATH)
-    # 检查文件夹是否存在
+    # 删除 images 文件夹下临时文件
     for folder in need_clean_folder:
-        FileTools.delete_file_or_folder(folder)
-        os.mkdir(folder)
+        for item in os.listdir(folder):
+            item_path = os.path.join(Constants.ROOT_PATH + r"\images", item)
+            if os.path.isfile(item_path):
+                os.remove(item_path)
 
     # TODO 需要检查need_copy_file need_copy_folder 文件文件夹是否存在
-    # 将bin、config文件夹中所有内容拷贝到threewords中
+    # 将bin、config文件夹中所有内容拷贝到 threewords 中
     for folder in need_copy_folder:
         src = os.path.join('.', folder)
         dst = os.path.join(package_folder, folder)

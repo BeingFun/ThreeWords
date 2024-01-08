@@ -33,12 +33,11 @@ class Constants:
     }
 
     # 域名
-    # _ 仅本文件访问
     URL = 'https://v1.hitokoto.cn/'
-    # 默认背景
-    DEFAULT_BACKGROUD = ROOT_PATH + r'\resources\default'
     # 添加文字后的图片位置
-    NEW_IMAGES_PATH = ROOT_PATH + r'\images'
+    IMAGES_PATH = ROOT_PATH + r'\images'
+    # 默认背景
+    DEFAULT_BACKGROUD = IMAGES_PATH + r'\default'
     # Set the system desktop background
     SPI_SETDESKWALLPAPER = 20
     # 网页请求配置
