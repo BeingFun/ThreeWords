@@ -1,7 +1,6 @@
 import winreg
 
 from src.util.config_init import ConfigInit
-
 from constants.constants import Constants
 
 program_name = "ThreeWords"

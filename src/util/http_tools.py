@@ -1,7 +1,7 @@
 import json
 import time
-
 import requests
+
 from constants.constants import Constants
 from src.util.config_init import ConfigInit
 

@@ -1,6 +1,5 @@
 import os
 import subprocess
-
 import tkinter as tk
 import pystray
 from PIL import Image
@@ -65,7 +64,6 @@ class Systray:
 
     def run(self):
         print("Start systray thread")
-        pythoncom.CoInitialize()
         self.tray.run()
 
     def __show_about(self):

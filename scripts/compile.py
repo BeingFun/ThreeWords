@@ -1,8 +1,9 @@
 import sys
 import os
-from src.util.file_tools import FileTools
-from constants.constants import Constants
+
 from PyInstaller.__main__ import run
+from constants.constants import Constants
+
 
 CUR_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -12,12 +13,6 @@ if __name__ == '__main__':
     performable_path = Constants.ROOT_PATH + r'\bin'
     icon_file_path = Constants.ROOT_PATH + r'\resources\\ico\\threewords.ico'
     work_path = CUR_PATH + r'\threewords_build'
-    # 创建运行时需要的文件夹
-    new_folder = [Constants.ROOT_PATH + r'\logs']
-
-    for folder in new_folder:
-        FileTools.delete_file_or_folder(folder)
-        os.mkdir(folder)
 
     # 设置编译参数和选项
     options = [

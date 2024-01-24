@@ -13,7 +13,7 @@ from src.util.http_tools import HttpTools
 
 
 class ThreeWords:
-    # 获取一言数据库响应，并格式化为Hitokoto类
+    # 获取一言数据库响应，并格式化为 Hitokoto 类
     @staticmethod
     def get_text():
         response = HttpTools.response()

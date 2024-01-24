@@ -1,16 +1,14 @@
 import os
 import shutil
-
 import zipfile
 
 from constants.constants import Constants
 
 if __name__ == '__main__':
-    # 创建package_folder
+    # 创建 package_folder
     package_folder = "ThreeWords"
     need_copy_folder = ['bin', 'config', 'resources', 'images']
-    need_copy_file = ['readme.md', 'changelog.md']
-    new_folder = ['logs']
+    need_copy_file = ['readme.md', 'changelog.md', "readme.pdf"]
     need_clean_folder = ['images']
 
     # 切换到根目录
@@ -29,11 +27,6 @@ if __name__ == '__main__':
         dst = os.path.join(package_folder, folder)
         shutil.copytree(src, dst)
 
-    for folder in new_folder:
-        src = os.path.join('.', folder)
-        dst = os.path.join(package_folder, folder)
-        shutil.copytree(src, dst)
-
     for file in need_copy_file:
         shutil.copy2(file, package_folder)
 
@@ -46,11 +39,6 @@ if __name__ == '__main__':
                 file_path = os.path.join(root, file)
                 # 将文件添加到 ZIP 文件中
                 zip_file.write(file_path)
-
-    # zipfile模块打包会忽略空文件，单独打包
-    with zipfile.ZipFile(package_folder + '.zip', 'a', zipfile.ZIP_DEFLATED) as zip_file:
-        for folder in new_folder:
-            zip_file.write(package_folder + r'/' + folder + '/')
 
     # 打包完成之后清理文件夹
     shutil.rmtree(package_folder)
