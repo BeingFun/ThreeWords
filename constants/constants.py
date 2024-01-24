@@ -46,6 +46,6 @@ class Constants:
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
         'Accept': 'application/json'}
     # 最大重试请求次数
-    MAX_RETRIES = 3
+    MAX_RETRIES = 100
     # 是否立即更新文本
     REFRESH_TEXT = False

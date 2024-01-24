@@ -17,6 +17,7 @@ class ThreeWords:
     @staticmethod
     def get_text():
         response = HttpTools.response()
+        # 将字典格式化为结构体，方便调用
         hitokoto = Hitokoto(**response)
         return hitokoto
 
@@ -32,9 +33,12 @@ class ThreeWords:
         origin_background = Constants.IMAGES_PATH + "\\" + origin_background
         image = Image.open(origin_background)
         draw = ImageDraw.Draw(image)
+        # 字体大小适应屏幕分辨率，保证不同分辨率图片设置的字体大小显示一致
+        text_setting.font_size = int(image.size[0] / tk.Tk().winfo_screenwidth() * text_setting.font_size)
         # Set font type and size
         font = ImageFont.truetype(text_setting.font_type.lower(), text_setting.font_size)
         text = data.hitokoto
+        # 计算文字起始位置
         if text_setting.text_position == (-1, -1):
             # Get size of text
             text_bbox = draw.textbbox((0, 0), text, font=font)
@@ -54,7 +58,6 @@ class ThreeWords:
             # x 距离左边距离
             # text_size[1] 高度
             # text_size[0] 宽度
-            # todo 用户配置非 -1，-1 case 处理
             from_y = y + text_size[1] * 2
             screenwidth = tk.Tk().winfo_screenwidth()
             from_x = x + text_size[0] + screenwidth * 10 / text_size[0]
