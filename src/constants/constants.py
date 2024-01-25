@@ -9,7 +9,7 @@ if FROZEN:
     _CUR_PATH = os.path.dirname(os.path.abspath(sys.executable))
 else:
     # 否则，从 __file__ 中获取当前文件的路径，并取其所在目录作为当前目录
-    _CUR_PATH = os.path.dirname(os.path.abspath(__file__))
+    _CUR_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class Constants:

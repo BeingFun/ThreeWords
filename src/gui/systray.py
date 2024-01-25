@@ -3,10 +3,9 @@ import subprocess
 import tkinter as tk
 import pystray
 from PIL import Image
-import pythoncom
 import webbrowser
 
-from constants.constants import Constants
+from src.constants.constants import Constants
 
 
 class Systray:

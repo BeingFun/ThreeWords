@@ -2,7 +2,7 @@ import os
 import shutil
 import zipfile
 
-from constants.constants import Constants
+from src.constants.constants import Constants
 
 if __name__ == '__main__':
     # 创建 package_folder

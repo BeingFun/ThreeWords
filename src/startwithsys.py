@@ -1,7 +1,7 @@
 import winreg
 
+from src.constants.constants import Constants
 from src.util.config_init import ConfigInit
-from constants.constants import Constants
 
 program_name = "ThreeWords"
 program_path = Constants.ROOT_PATH + r"\bin\ThreeWords.exe"

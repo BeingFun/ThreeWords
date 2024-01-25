@@ -1,4 +1,4 @@
-from constants.constants import Constants
+from src.constants.constants import Constants
 from src.util.file_tools import FileTools
 
 

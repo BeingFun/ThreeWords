@@ -1,7 +1,7 @@
 import configparser
 import chardet
 
-from constants.constants import Constants
+from src.constants.constants import Constants
 
 
 class ImageSetting:

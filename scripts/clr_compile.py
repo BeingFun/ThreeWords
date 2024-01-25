@@ -1,6 +1,6 @@
 import os
 import shutil
-from constants.constants import Constants
+from src.constants.constants import Constants
 from src.util.file_tools import FileTools
 
 CUR_PATH = os.path.dirname(os.path.abspath(__file__))

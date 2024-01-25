@@ -1,5 +1,5 @@
 import os
-from constants.constants import Constants
+from src.constants.constants import Constants
 
 
 new_image = Constants.ROOT_PATH + r'\images'

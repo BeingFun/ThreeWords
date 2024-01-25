@@ -1,8 +1,8 @@
 import time
 
+from src.constants.constants import Constants
 from src.excepthread import ExcThread
 from src.gui.systray import Systray
-from constants.constants import Constants
 from src.startwithsys import WithSysInit
 from src.threewords import ThreeWords
 from src.util.config_init import ConfigInit
@@ -11,18 +11,17 @@ from src.util.log import Log
 
 def threewords():
     print("Start threewords thread")
-    # 双层while循环是为了当接收到 REFRESH_TEXT 时，停止第二层循环的睡眠，从第一层循环重新开始
-    while True:  # 第一层循环
-        while True:  # 第二层循环
-            data = ThreeWords.get_text()
-            ThreeWords.copy_images()
-            ThreeWords.add_text(data)
-            ThreeWords.set_backgroud()
-            for i in range(ConfigInit.config_init().base_setting.text_update_period):
-                if Constants.REFRESH_TEXT:
-                    Constants.REFRESH_TEXT = False
-                    break
-                time.sleep(1)
+    # 当接收到 REFRESH_TEXT 时，停止第二层循环的睡眠，从第一层循环重新开始
+    while True:  # 第二层循环
+        data = ThreeWords.get_text()
+        ThreeWords.copy_images()
+        ThreeWords.add_text(data)
+        ThreeWords.set_backgroud()
+        for i in range(ConfigInit.config_init().base_setting.text_update_period):
+            if Constants.REFRESH_TEXT:
+                Constants.REFRESH_TEXT = False
+                break
+            time.sleep(1)
 
 
 def start_child_thread():

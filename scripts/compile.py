@@ -2,7 +2,7 @@ import sys
 import os
 
 from PyInstaller.__main__ import run
-from constants.constants import Constants
+from src.constants.constants import Constants
 
 
 CUR_PATH = os.path.dirname(os.path.abspath(__file__))
