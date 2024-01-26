@@ -29,6 +29,7 @@ class WithSysInit:
         if start_with_sys:
             try:
                 WithSysInit.add_with_sys(program_name, program)
+                print("开机自启设置成功")
             except BaseException as e:
                 print("开机自启设置失败")
                 print(e)
@@ -37,6 +38,7 @@ class WithSysInit:
         else:
             try:
                 WithSysInit.delete_with_sys(program_name)
+                print("关闭自启设置成功")
             except BaseException as e:
                 print("关闭开机自启设置失败")
                 print(e)

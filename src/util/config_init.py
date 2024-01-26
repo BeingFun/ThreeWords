@@ -36,7 +36,6 @@ class Setting:
 class ConfigInit:
     @staticmethod
     def config_init() -> Setting:
-        print("start config init...")
         # Read the configuration file information
         config = configparser.ConfigParser(allow_no_value=False)
         configfile = Constants.ROOT_PATH + "\\config\\config.ini"
@@ -95,5 +94,4 @@ class ConfigInit:
                                    text_url=text_url)
 
         setting = Setting(base_setting=base_setting, image_setting=image_setting, text_setting=text_setting)
-        print("finish config init...")
         return setting

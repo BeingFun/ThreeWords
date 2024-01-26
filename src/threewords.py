@@ -13,7 +13,9 @@ from src.util.http_tools import HttpTools
 
 
 class ThreeWords:
-    # 获取一言数据库响应，并格式化为 Hitokoto 类
+    """
+    获取一言数据库响应，并格式化为 Hitokoto 类
+    """
     @staticmethod
     def get_text():
         response = HttpTools.response()
@@ -38,11 +40,13 @@ class ThreeWords:
         # 根据屏幕分辨率重采样图像大小,使字体在不同分辨率图像下保持一致,也一定程度上提升了图像质量
         image = image.resize((screenwidth, screenheight), resample=Image.LANCZOS)
         draw = ImageDraw.Draw(image)
-        # Set font type and size
-        font = ImageFont.truetype(text_setting.font_type.lower(), text_setting.font_size)
-        text = data.hitokoto
+
         # 显示文字
-        text_bbox = draw.textbbox((0, 0), text, font=font)
+        text_font = ImageFont.truetype(text_setting.font_type.lower(), text_setting.font_size)
+        text = data.hitokoto
+        text_bbox = draw.textbbox((0, 0), text, font=text_font)
+        # text_size[1] 高度
+        # text_size[0] 宽度
         text_size = (text_bbox[2] - text_bbox[0], text_bbox[3] - text_bbox[1])
         if text_setting.text_position == (-1, -1):
             # Calculate x and y coordinates for centering the text
@@ -51,27 +55,20 @@ class ThreeWords:
         else:
             x = text_setting.text_position[0]
             y = text_setting.text_position[1]
-        # Draw the text on the image
-        draw.text((x, y), text, fill=text_setting.font_color, font=font)
+        draw.text((x, y), text, fill=text_setting.font_color, font=text_font)
 
         # 显示文字出处
-        from_bbox = draw.textbbox((0, 0), data.from_, font=font)
-        from_size = (from_bbox[2] - from_bbox[0], from_bbox[3] - from_bbox[1])
         if text_setting.text_from:
-            # 计算 出处 位置
-            # y 距离顶边距离
-            # x 距离左边距离
-            # text_size[1] 高度
-            # text_size[0] 宽度
+            from_font = ImageFont.truetype(text_setting.font_type.lower(), int(text_setting.font_size * 0.7))
+            from_bbox = draw.textbbox((0, 0), "——「{}」".format(data.from_), font=from_font)
+            from_size = (from_bbox[2] - from_bbox[0], from_bbox[3] - from_bbox[1])
+
             from_y = y + text_size[1] * 2
-            from_x = x + text_size[0] + screenwidth * 10 / text_size[0]
-            # 如果文字出处的文字太长,则始终距右侧10%宽度距离显示
+            from_x = x + text_size[0]
+            # 如果文字出处的文字太长,则始终距右侧 10% 宽度距离显示
             if from_x + from_size[0] > screenwidth * 0.9:
                 from_x = screenwidth * 0.9 - from_size[0]
-            from_font = ImageFont.truetype(text_setting.font_type.lower(),
-                                           int(text_setting.font_size * 0.7))
-            draw.text((from_x, from_y), "——「{}」".format(data.from_), fill=text_setting.font_color,
-                      font=from_font)
+            draw.text((from_x, from_y), "——「{}」".format(data.from_), fill=text_setting.font_color, font=from_font)
 
         # Save the image with the added text
         image.save(text_background)

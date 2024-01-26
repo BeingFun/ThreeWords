@@ -9,8 +9,10 @@ class ExcThread(threading.Thread):
         super(ExcThread, self).__init__(None, target, name, args, kwargs)
         self.exit_code = None
         self.exception = None
-        self.exc_traceback = ''
+        self.exc_traceback = None
         self.daemon = True
+        self.name = name
+        self.target = target
 
     def run(self):
         try:
