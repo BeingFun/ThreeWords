@@ -51,6 +51,8 @@ class ConfigInit:
         # BASIC_SETTING
         start_with_sys = dict_config["BASIC_SETTING"].getboolean("start_with_system")
         text_update_period = dict_config["BASIC_SETTING"].getint("text_update_period")
+        if text_update_period < 60:
+            text_update_period = 60
 
         base_setting = BasicSetting(
             start_with_sys=start_with_sys,
@@ -60,7 +62,9 @@ class ConfigInit:
         # IMAGE_SETTING
         image_path = dict_config['IMAGE_SETTING'].get('BACKGROUND_IMAGES_PATH')
         if image_path.lower() == 'default':
-            image_setting = ImageSetting(Constants.DEFAULT_BACKGROUD)
+            image_setting = ImageSetting(background_images_path=Constants.DEFAULT_BACKGROUD)
+        elif image_path.lower() == "bing":
+            image_setting = ImageSetting(background_images_path="bing")
         else:
             image_setting = ImageSetting(background_images_path=image_path)
 
@@ -84,7 +88,7 @@ class ConfigInit:
                     text_style = text_style + r'c={}'.format(Constants.FONT_STYLE_MAP[text_style_arr[i]])
         text_from = dict_config["TEXT_SETTING"].getboolean('TEXT_FROM')
         # 最终的 url 拼接
-        text_url = Constants.URL + text_style
+        text_url = Constants.HITOKOTO_URL + text_style
         text_setting = TextSetting(font_color=font_color,
                                    font_size=dict_config['TEXT_SETTING'].getint('FONT_SIZE'),
                                    font_type=dict_config['TEXT_SETTING'].get('FONT_TYPE'),

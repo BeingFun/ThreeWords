@@ -34,3 +34,23 @@ class FileTools:
         if not os.path.exists((os.path.dirname(file))):
             os.mkdir(os.path.dirname(file))
         open(file, "x").close()
+
+    # 安全创建文件夹
+    @staticmethod
+    def make_folder_s(folder):
+        if os.path.exists(folder):
+            shutil.rmtree(folder)
+        os.mkdir(folder)
+
+    # 清空文件夹
+    @staticmethod
+    def empty_folder_s(folder_path):
+        file_path = None
+        for filename in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, filename)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+            shutil.rmtree(file_path)
+        except FileNotFoundError:
+            print(f"文件夹 {folder_path} 不存在！")

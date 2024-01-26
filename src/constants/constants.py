@@ -33,19 +33,28 @@ class Constants:
     }
 
     # 域名
-    URL = 'https://v1.hitokoto.cn/'
+    HITOKOTO_URL = 'https://v1.hitokoto.cn/'
+    # 必应壁纸根节点
+    BING_URL = "https://www.bing.com/HPImageArchive.aspx"
     # 添加文字后的图片位置
     IMAGES_PATH = ROOT_PATH + r'\images'
     # 默认背景
     DEFAULT_BACKGROUD = IMAGES_PATH + r'\default'
+    # 必应壁纸
+    BING_BACKGROUD = IMAGES_PATH + r'\bing images'
+    # 当前使用壁纸
+    CUR_IMAGE = IMAGES_PATH + r'\cur use'
     # Set the system desktop background
     SPI_SETDESKWALLPAPER = 20
     # 网页请求配置
     # 设置请求头，模拟浏览器行为
     HEADERS = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-        'Accept': 'application/json'}
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'}
     # 最大重试请求次数
     MAX_RETRIES = 3
     # 是否立即更新文本
     REFRESH_TEXT = False
+    REFRESH_IMAGE = False
+    REFRESH_ALL = False
+    OPEN_IMAGE_REFRESH = False
+    OPEN_TEXT_REFRESH = True

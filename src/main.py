@@ -1,28 +1,58 @@
 import time
 
 from src.constants.constants import Constants
-from src.excepthread import ExcThread
-from src.gui.systray import Systray
-from src.startwithsys import WithSysInit
-from src.threewords import ThreeWords
+from src.image import ThreeImages
+from src.text import ThreeWords
 from src.util.config_init import ConfigInit
+from src.util.excepthread import ExcThread
+from src.systray import Systray
+from src.util.startwithsys import WithSysInit
 from src.util.log import Log
 from src.util.notification import Notification
 
 
-def threewords():
+def three():
     print("Start threewords thread")
     # 当接收到 REFRESH_TEXT 时，停止第二层循环的睡眠，从第一层循环重新开始
+    break_flag = False
+    data = None
+    ThreeImages.get_image()
     while True:  # 第二层循环
-        data = ThreeWords.get_text()
-        ThreeWords.copy_images()
-        ThreeWords.add_text(data)
-        ThreeWords.set_backgroud()
         print("threewords thread sleep {}s\n".format(ConfigInit.config_init().base_setting.text_update_period))
+        if break_flag:
+            break_flag = False
+        else:
+            if Constants.OPEN_IMAGE_REFRESH:
+                ThreeImages.get_image()
+            if Constants.OPEN_TEXT_REFRESH:
+                data = ThreeWords.get_text()
+                ThreeWords.add_text(data)
+            ThreeImages.set_backgroud()
+
         for i in range(ConfigInit.config_init().base_setting.text_update_period):
             if Constants.REFRESH_TEXT:
+                data = ThreeWords.get_text()
+                ThreeWords.add_text(data)
+                ThreeImages.set_backgroud()
+                break_flag = True
                 Constants.REFRESH_TEXT = False
                 break
+            elif Constants.REFRESH_IMAGE:
+                ThreeImages.get_image()
+                ThreeWords.add_text(data)
+                ThreeImages.set_backgroud()
+                Constants.REFRESH_IMAGE = False
+                break_flag = True
+                break
+            elif Constants.REFRESH_ALL:
+                data = ThreeWords.get_text()
+                ThreeImages.get_image()
+                ThreeWords.add_text(data)
+                ThreeImages.set_backgroud()
+                Constants.REFRESH_ALL = False
+                break_flag = True
+                break
+
             time.sleep(1)
 
 
@@ -39,7 +69,8 @@ def start_child_thread():
     systray_thread = ExcThread(target=systray.run, name="systray_thread")
     systray_thread.start()
 
-    threewords_thread = ExcThread(target=threewords, name="threewords_thread")
+    # Threewords 线程
+    threewords_thread = ExcThread(target=three, name="threewords_thread")
     threewords_thread.start()
 
     thread_task_list.append(threewords_thread)
@@ -71,3 +102,4 @@ if __name__ == "__main__":
                 thread_list.append(new_thread)
         if exit_flag:
             break
+        time.sleep(1)
