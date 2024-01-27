@@ -39,8 +39,9 @@ class ThreeWords:
     @staticmethod
     def add_text(data: Hitokoto):
         text_setting = ConfigInit.config_init().text_setting
-        screenwidth = tk.Tk().winfo_screenwidth()
-        screenheight = tk.Tk().winfo_screenheight()
+        root = tk.Tk()
+        screenwidth = root.winfo_screenwidth()
+        screenheight = root.winfo_screenheight()
         origin_background = None
         # Get the image from the NEW_IMAGES_PATH directory
         for image_name in os.listdir(Constants.CUR_IMAGE):
@@ -86,3 +87,4 @@ class ThreeWords:
 
         # Save the image with the added text
         image.save(text_background)
+        root.destroy()

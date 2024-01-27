@@ -1,7 +1,6 @@
 import ctypes
 import os
 import time
-import random
 import shutil
 import requests
 import json
@@ -66,14 +65,14 @@ class ThreeImages:
             ThreeImages.get_bing_images()
             image_setting.background_from = Constants.BING_BACKGROUD
         images = os.listdir(image_setting.background_from)
-        random_image = images[dir_image_idx]
+        image = images[dir_image_idx]
         dir_image_idx += 1
         if dir_image_idx == len(images):
             dir_image_idx = 0
         # Copy the random image to the new image set folder
-        src_path = image_setting.background_from + "\\" + random_image
+        src_path = image_setting.background_from + "\\" + image
         FileTools.make_folder_s(Constants.CUR_IMAGE)
-        origin_image = "cur_use." + random_image.split(".")[1]
+        origin_image = "cur_use." + image.split(".")[1]
         dst_path = Constants.IMAGES_PATH + r"\\cur use\\" + origin_image
         shutil.copy2(src_path, dst_path)
 

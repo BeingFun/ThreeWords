@@ -85,7 +85,6 @@ def show_about():
         text.tag_bind(i, '<Leave>', show_xterm_cursor)
 
     # 运行窗口，直到用户关闭它
-    root.focus()
     root.mainloop()
 
 
