@@ -6,18 +6,26 @@ from PIL import Image
 import webbrowser
 
 from src.constants.constants import Constants
+from src.util.config_init import ConfigInit
+from src.util.dump_config import dump_config
 
 dic = {
     "text_refresh": ["√    开启文字刷新", "      开启文字刷新"],
     "image_refresh": ["√    开启图像刷新", "      开启图像刷新"]
 }
+if ConfigInit.config_init().text_setting.open_text_update:
+    text_refresh = dic["text_refresh"][0]
+    enabled_update_text = True
+else:
+    text_refresh = dic["text_refresh"][1]
+    enabled_update_text = False
 
-text_refresh = dic["text_refresh"][0]
-image_refresh = dic["image_refresh"][1]
-
-
-def refresh_text():
-    Constants.REFRESH_TEXT = True
+if ConfigInit.config_init().image_setting.open_background_update:
+    image_refresh = dic["image_refresh"][0]
+    enabled_update_image = True
+else:
+    image_refresh = dic["image_refresh"][1]
+    enabled_update_image = False
 
 
 def refresh_image():
@@ -109,15 +117,18 @@ class Systray:
             pystray.Menu.SEPARATOR,
             pystray.MenuItem(
                 "      立即刷新文字",
-                refresh_text
+                enabled=lambda enabled: enabled_update_text,
+                action=self.refresh_text
             ),
             pystray.MenuItem(
                 "      立即刷新图片",
-                refresh_image,
+                enabled=lambda enabled: enabled_update_image,
+                action=refresh_image,
             ),
             pystray.MenuItem(
-                "      立即刷新全部",
-                refresh_all,
+                text="      立即刷新全部",
+                action=refresh_all,
+                visible=False
             ),
             pystray.MenuItem(
                 "      显示主窗口",
@@ -142,29 +153,37 @@ class Systray:
         self.tray.menu = menu
         print("Systray init finish")
 
-    # @staticmethod
+    def refresh_text(self):
+        Constants.REFRESH_TEXT = True
+
     def open_text_refresh(self):
-        global dic, text_refresh
+        global dic, text_refresh, enabled_update_text
         for item in dic["text_refresh"]:
             if text_refresh != item:
                 text_refresh = item
                 break
+
         if text_refresh == dic["text_refresh"][0]:
-            Constants.OPEN_TEXT_REFRESH = True
+            dump_config("OPEN_TEXT_UPDATE", True)
+            enabled_update_text = True
         else:
-            Constants.OPEN_TEXT_REFRESH = False
+            dump_config("OPEN_TEXT_UPDATE", False)
+            enabled_update_text = False
         self.tray.update_menu()
 
     def open_image_refresh(self):
-        global dic, image_refresh
+        global dic, image_refresh, enabled_update_image
         for item in dic["image_refresh"]:
             if image_refresh != item:
                 image_refresh = item
                 break
+
         if image_refresh == dic["image_refresh"][0]:
-            Constants.OPEN_IMAGE_REFRESH = True
+            dump_config("OPEN_BACKGROUND_UPDATE", True)
+            enabled_update_image = True
         else:
-            Constants.OPEN_IMAGE_REFRESH = False
+            dump_config("OPEN_BACKGROUND_UPDATE", False)
+            enabled_update_image = False
         self.tray.update_menu()
 
     def run(self):

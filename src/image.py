@@ -11,7 +11,8 @@ from src.util.config_init import ConfigInit
 from src.util.file_tools import FileTools
 
 # 由于微软必应壁纸8张，所以循环从-1到7循环
-image_idx = 0
+bing_image_idx = 0
+dir_image_idx = 0
 
 
 class ThreeImages:
@@ -26,9 +27,9 @@ class ThreeImages:
         """
         for i in range(Constants.MAX_RETRIES):
             try:
-                global image_idx
+                global bing_image_idx
                 FileTools.make_folder_s(Constants.BING_BACKGROUD)
-                idx = image_idx
+                idx = bing_image_idx
                 url = Constants.BING_URL + "?format=js&idx={}&n={}".format(idx, num)
                 response = requests.get(url, headers=Constants.HEADERS)
                 response.raise_for_status()  # 如果响应状态码不是 200，会抛出异常
@@ -47,9 +48,9 @@ class ThreeImages:
                     pass
                 with open(image_path, "wb") as file:
                     file.write(image_content)
-                image_idx += 1
-                if image_idx == 8:
-                    image_idx = -1
+                bing_image_idx += 1
+                if bing_image_idx == 8:
+                    bing_image_idx = -1
                 break
             except Exception as e:
                 print(f'Retry {i + 1}/{Constants.MAX_RETRIES}: {e}')
@@ -59,15 +60,18 @@ class ThreeImages:
 
     @staticmethod
     def get_image():
+        global dir_image_idx
         image_setting = ConfigInit.config_init().image_setting
-        if image_setting.background_images_path == "bing":
+        if image_setting.background_from == "bing":
             ThreeImages.get_bing_images()
-            image_setting.background_images_path = Constants.BING_BACKGROUD
-        # Select a random image from the original image set
-        images = os.listdir(image_setting.background_images_path)
-        random_image = images[random.randint(0, len(images) - 1)]
+            image_setting.background_from = Constants.BING_BACKGROUD
+        images = os.listdir(image_setting.background_from)
+        random_image = images[dir_image_idx]
+        dir_image_idx += 1
+        if dir_image_idx == len(images):
+            dir_image_idx = 0
         # Copy the random image to the new image set folder
-        src_path = image_setting.background_images_path + "\\" + random_image
+        src_path = image_setting.background_from + "\\" + random_image
         FileTools.make_folder_s(Constants.CUR_IMAGE)
         origin_image = "cur_use." + random_image.split(".")[1]
         dst_path = Constants.IMAGES_PATH + r"\\cur use\\" + origin_image

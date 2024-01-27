@@ -9,18 +9,10 @@ if __name__ == '__main__':
     package_folder = "ThreeWords"
     need_copy_folder = ['bin', 'config', 'resources', 'images']
     need_copy_file = ['readme.md', 'changelog.md', "readme.pdf"]
-    need_clean_folder = ['images']
 
     # 切换到根目录
     os.chdir(Constants.ROOT_PATH)
-    # 删除 images 文件夹下临时文件
-    for folder in need_clean_folder:
-        for item in os.listdir(folder):
-            item_path = os.path.join(Constants.ROOT_PATH + r"\images", item)
-            if os.path.isfile(item_path):
-                os.remove(item_path)
 
-    # TODO 需要检查need_copy_file need_copy_folder 文件文件夹是否存在
     # 将bin、config文件夹中所有内容拷贝到 threewords 中
     for folder in need_copy_folder:
         src = os.path.join('.', folder)

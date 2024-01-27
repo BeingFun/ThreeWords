@@ -18,18 +18,20 @@ def three():
     data = None
     ThreeImages.get_image()
     while True:  # 第二层循环
-        print("threewords thread sleep {}s\n".format(ConfigInit.config_init().base_setting.text_update_period))
+        print("threewords thread sleep {} minutes\n".format(ConfigInit.config_init().base_setting.update_period))
         if break_flag:
             break_flag = False
         else:
-            if Constants.OPEN_IMAGE_REFRESH:
+            if ConfigInit.config_init().image_setting.open_background_update:
                 ThreeImages.get_image()
-            if Constants.OPEN_TEXT_REFRESH:
+            if ConfigInit.config_init().text_setting.open_text_update:
                 data = ThreeWords.get_text()
-                ThreeWords.add_text(data)
+            else:
+                data = None
+            ThreeWords.add_text(data)
             ThreeImages.set_backgroud()
 
-        for i in range(ConfigInit.config_init().base_setting.text_update_period):
+        for i in range(ConfigInit.config_init().base_setting.update_period * 60):
             if Constants.REFRESH_TEXT:
                 data = ThreeWords.get_text()
                 ThreeWords.add_text(data)
@@ -39,20 +41,13 @@ def three():
                 break
             elif Constants.REFRESH_IMAGE:
                 ThreeImages.get_image()
+                if ConfigInit.config_init().text_setting.open_text_update is False:
+                    data = None
                 ThreeWords.add_text(data)
                 ThreeImages.set_backgroud()
                 Constants.REFRESH_IMAGE = False
                 break_flag = True
                 break
-            elif Constants.REFRESH_ALL:
-                data = ThreeWords.get_text()
-                ThreeImages.get_image()
-                ThreeWords.add_text(data)
-                ThreeImages.set_backgroud()
-                Constants.REFRESH_ALL = False
-                break_flag = True
-                break
-
             time.sleep(1)
 
 
@@ -64,7 +59,7 @@ def start_child_thread():
     thread_task_list = []
     # 初始化
     WithSysInit.init()
-    # 系统托盘线程实例
+    # 系统托盘线程
     systray = Systray()
     systray_thread = ExcThread(target=systray.run, name="systray_thread")
     systray_thread.start()
@@ -80,8 +75,7 @@ def start_child_thread():
 
 if __name__ == "__main__":
     """
-    feature: 轮询各个子线程的状态，如果有子线程失败就结束主线程 
-    从而有一个子线程异常时，主线程结束，导致所有子线程(已经全部设置为守护线程)退出
+    feature: 轮询各个子线程的状态
     """
     thread_list = start_child_thread()
     exit_flag = False

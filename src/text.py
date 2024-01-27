@@ -5,7 +5,6 @@ import requests
 from PIL import Image, ImageDraw, ImageFont
 import tkinter as tk
 
-from src.image import ThreeImages
 from src.util.hitokoto import Hitokoto
 from src.constants.constants import Constants
 from src.util.config_init import ConfigInit
@@ -52,8 +51,10 @@ class ThreeWords:
         image = Image.open(origin_background)
         # 根据屏幕分辨率重采样图像大小,使字体在不同分辨率图像下保持一致,也一定程度上提升了图像质量
         image = image.resize((screenwidth, screenheight), resample=Image.LANCZOS)
+        if data is None:
+            image.save(text_background)
+            return
         draw = ImageDraw.Draw(image)
-
         # 显示文字
         text_font = ImageFont.truetype(text_setting.font_type.lower(), text_setting.font_size)
         text = data.hitokoto
@@ -85,4 +86,3 @@ class ThreeWords:
 
         # Save the image with the added text
         image.save(text_background)
-

@@ -56,5 +56,3 @@ class Constants:
     REFRESH_TEXT = False
     REFRESH_IMAGE = False
     REFRESH_ALL = False
-    OPEN_IMAGE_REFRESH = False
-    OPEN_TEXT_REFRESH = True
