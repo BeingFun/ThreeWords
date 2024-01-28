@@ -27,9 +27,9 @@ class ThreeWords:
                 break  # 如果请求成功，则跳出循环
             except Exception as e:
                 print(f'Retry {i + 1}/{Constants.MAX_RETRIES}: {e}')
-                time.sleep(60)
                 if i == Constants.MAX_RETRIES - 1:
                     raise e
+                time.sleep(60)
         response_text = response.text.replace(r'"from"', r'"from_"')
         response = json.loads(response_text)
         # 将字典格式化为结构体，方便调用

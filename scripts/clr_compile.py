@@ -1,10 +1,16 @@
 import os
 import shutil
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from src.constants.constants import Constants
 from src.util.file_tools import FileTools
 
-CUR_PATH = os.path.dirname(os.path.abspath(__file__))
+print("#" * 60)
+print("start clr compile...")
 
+CUR_PATH = os.path.dirname(os.path.abspath(__file__))
 build_path = CUR_PATH + r'\threewords_build'
 spec_path = CUR_PATH + r'\ThreeWords.spec'
 bin_path = Constants.ROOT_PATH + r'\bin'
@@ -24,3 +30,6 @@ for root, dirs, files in os.walk(Constants.ROOT_PATH):
         pycache_dir = os.path.join(root, "__pycache__")
         print(f"Removing {pycache_dir}")
         shutil.rmtree(pycache_dir)
+
+print("finish clr compile...")
+print("#" * 60)

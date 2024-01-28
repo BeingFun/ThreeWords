@@ -1,10 +1,15 @@
 import os
 import shutil
+import sys
 import zipfile
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.constants.constants import Constants
 
 if __name__ == '__main__':
+    print("#" * 60)
+    print("start deploy...")
     # 创建 package_folder
     package_folder = "ThreeWords"
     need_copy_folder = ['bin', 'config', 'resources', 'images']
@@ -34,3 +39,5 @@ if __name__ == '__main__':
 
     # 打包完成之后清理文件夹
     shutil.rmtree(package_folder)
+    print("finish deploy...")
+    print("#" * 60)

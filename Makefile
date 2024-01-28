@@ -6,9 +6,9 @@ compile:
 deploy:
 	$(MAKE) ./scripts/clr_deploy.py && $(MAKE) ./scripts/deploy.py
 clr_all:
-	$(MAKE) ./scripts/clr_deploy.py
 	$(MAKE) ./scripts/clr_running.py
-	$(MAKE) ./scripts/clr_compile.py  # if clr_compile not at last, use ROOT_PATH cause make new *.pyc file
+	$(MAKE) ./scripts/clr_compile.py
+	$(MAKE) ./scripts/clr_deploy.py
 clr_deploy:
 	$(MAKE) ./scripts/clr_deploy.py
 clr_compile:
