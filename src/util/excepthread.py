@@ -21,8 +21,8 @@ class ExcThread(threading.Thread):
             self.exception = e
             self.exit_code = 1
             self.exc_traceback = traceback.format_exc()
-        else:
-            self.exit_code = 0
+        except SystemExit as e:
+            self.exit_code = e.code
 
     def _run(self):
         try:

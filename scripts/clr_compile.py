@@ -6,6 +6,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.constants.constants import Constants
 from src.util.file_tools import FileTools
+from clr_running import clr_pycache
+
 
 print("#" * 60)
 print("start clr compile...")
@@ -22,14 +24,7 @@ for path in files_list:
     FileTools.delete_file_or_folder(path)
     print(f"Removing {path}")
 
-# 遍历当前目录及其子目录
-for root, dirs, files in os.walk(Constants.ROOT_PATH):
-    # 检查是否存在 __pycache__ 文件夹
-    if "__pycache__" in dirs:
-        # 删除 __pycache__ 文件夹
-        pycache_dir = os.path.join(root, "__pycache__")
-        print(f"Removing {pycache_dir}")
-        shutil.rmtree(pycache_dir)
+clr_pycache(Constants.ROOT_PATH)
 
 print("finish clr compile...")
 print("#" * 60)

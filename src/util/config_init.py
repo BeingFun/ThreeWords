@@ -5,8 +5,8 @@ from src.constants.constants import Constants
 
 
 class ImageSetting:
-    def __init__(self, open_background_update, background_from):
-        self.open_background_update = open_background_update
+    def __init__(self, open_image_update, background_from):
+        self.open_image_update = open_image_update
         self.background_from = background_from
 
 
@@ -60,13 +60,13 @@ class ConfigInit:
         )
 
         # IMAGE_SETTING
-        open_background_update = dict_config['IMAGE_SETTING'].getboolean('OPEN_BACKGROUND_UPDATE')
+        open_image_update = dict_config['IMAGE_SETTING'].getboolean('OPEN_IMAGE_UPDATE')
         background_from = dict_config['IMAGE_SETTING'].get('BACKGROUND_IMAGES_FROM')
         if background_from.lower() == 'default':
             background_from = Constants.DEFAULT_BACKGROUD
         elif background_from.lower() == "bing":
             background_from = "bing"
-        image_setting = ImageSetting(open_background_update, background_from)
+        image_setting = ImageSetting(open_image_update, background_from)
 
         # TEXT_SETTING
         open_text_update = dict_config["TEXT_SETTING"].getboolean("OPEN_TEXT_UPDATE")

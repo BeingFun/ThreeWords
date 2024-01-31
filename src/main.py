@@ -6,7 +6,7 @@ from src.image import ThreeImages
 from src.text import ThreeWords
 from src.util.config_init import ConfigInit
 from src.util.excepthread import ExcThread
-from src.systray import Systray
+from src.gui.systemtrayui import SystemTray
 from src.util.startwithsys import WithSysInit
 from src.util.log import Log
 from src.util.notification import Notification
@@ -16,7 +16,7 @@ def run_normal(break_flag, data):
     if break_flag:
         break_flag = False
     else:
-        if ConfigInit.config_init().image_setting.open_background_update:
+        if ConfigInit.config_init().image_setting.open_image_update:
             ThreeImages.get_image()
         if ConfigInit.config_init().text_setting.open_text_update:
             data = ThreeWords.get_text()
@@ -45,6 +45,13 @@ def run_interrupt(break_flag, data):
             Constants.REFRESH_IMAGE = False
             break_flag = True
             break
+        elif Constants.REFRESH_ALL:
+            data = ThreeWords.get_text()
+            ThreeImages.get_image()
+            ThreeWords.add_text(data)
+            ThreeImages.set_backgroud()
+            Constants.REFRESH_ALL = False
+
         time.sleep(1)
     return break_flag, data
 
@@ -56,7 +63,11 @@ def three():
     data = None
     ThreeImages.get_image()
     while True:  # 第二层循环
-        print("threewords thread sleep {} minutes\n".format(ConfigInit.config_init().base_setting.update_period))
+        print(
+            "threewords thread sleep {} minutes\n".format(
+                ConfigInit.config_init().base_setting.update_period
+            )
+        )
         data = run_normal(break_flag, data)
         break_flag, data = run_interrupt(break_flag, data)
 
@@ -70,8 +81,8 @@ def start_child_thread():
     # 初始化
     WithSysInit.init()
     # 系统托盘线程
-    systray = Systray()
-    systray_thread = ExcThread(target=systray.run, name="systray_thread")
+    systemtray = SystemTray()
+    systray_thread = ExcThread(target=systemtray.run, name="systray_thread")
     systray_thread.start()
 
     # Threewords 线程
@@ -93,7 +104,7 @@ if __name__ == "__main__":
             if task.exit_code == 0:
                 sys.exit(0)
             if not task.is_alive():
-                log_content = (str(task.exception) + "split_symb" + task.exc_traceback)
+                log_content = str(task.exception) + "split_symb" + task.exc_traceback
                 Log.save_log(content=log_content)
                 # 当文字更新失败时，仅通知用户，重新拉起失败线程
                 # raise task.exception

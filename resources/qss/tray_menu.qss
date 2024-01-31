@@ -1,0 +1,31 @@
+QMenu {
+    color: #b1b1b2;
+    background-color: #2d2d38;
+    font-size: 14px;
+    /* font-family:"楷体"; */
+    padding-top: 10px;
+    padding-left: 25px;
+}
+
+QMenu::item {
+    /* top|right|bottom|left */
+    padding: 5px 5px 5px 5px;
+    width: 135px;
+}
+
+QMenu::item::selected {
+    background-color: #42424c;
+    font-size: 15px;
+}
+
+QMenu::item:!enabled {
+    color: #4A4A4A;
+}
+
+QMenu::separator {
+    height: 1px;
+    background: #373742;
+    margin: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
