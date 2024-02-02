@@ -17,7 +17,7 @@ if __name__ == '__main__':
     version = "release"
     threewords_path = Constants.ROOT_PATH + r'\src\\main.py'
     performable_path = Constants.ROOT_PATH + r'\bin'
-    icon_file_path = Constants.ROOT_PATH + r'\resources\ico\threewords.ico'
+    icon_file_path = Constants.ROOT_PATH + r'\resources\ico\logo.ico'
     work_path = CUR_PATH + r'\threewords_build'
     # 打包 PyInstaller 未识别的库
     hidden_import = "plyer.platforms.win.notification"

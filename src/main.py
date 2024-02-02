@@ -6,7 +6,7 @@ from src.image import ThreeImages
 from src.text import ThreeWords
 from src.util.config_init import ConfigInit
 from src.util.excepthread import ExcThread
-from src.gui.systemtrayui import SystemTray
+from src.gui.maingui import SystemTray
 from src.util.startwithsys import WithSysInit
 from src.util.log import Log
 from src.util.notification import Notification

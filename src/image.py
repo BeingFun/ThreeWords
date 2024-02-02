@@ -61,9 +61,11 @@ class ThreeImages:
     def get_image():
         global dir_image_idx
         image_setting = ConfigInit.config_init().image_setting
-        if image_setting.background_from == "bing":
+        if image_setting.background_from == "必应每日壁纸":
             ThreeImages.get_bing_images()
             image_setting.background_from = Constants.BING_BACKGROUD
+        elif image_setting.background_from == "软件自带":
+            image_setting.background_from = Constants.DEFAULT_BACKGROUD
         images = os.listdir(image_setting.background_from)
         image = images[dir_image_idx]
         dir_image_idx += 1

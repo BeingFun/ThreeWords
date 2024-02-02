@@ -17,12 +17,27 @@ class ThreeWords:
 
     @staticmethod
     def get_text():
-        url = ConfigInit.config_init().text_setting.text_url
+        text_style = ConfigInit.config_init().text_setting.text_style
+        if text_style == 'All':
+            text_style = ''
+        else:
+            text_style_arr = text_style.replace(' ', '').split('&')
+            text_style = r'?'
+            for i in range(len(text_style_arr)):
+                if (text_style_arr[i] not in Constants.FONT_STYLE_MAP):
+                    raise TypeError("文字风格 {} 不支持，请检查设置".format(text_style_arr[i]))
+                if (i != len(text_style_arr) - 1):
+                    text_style = text_style + r'c={}&'.format(Constants.FONT_STYLE_MAP[text_style_arr[i]])
+                else:
+                    text_style = text_style + r'c={}'.format(Constants.FONT_STYLE_MAP[text_style_arr[i]])
+
+        text_url = Constants.HITOKOTO_URL + text_style
+
         response = None
         for i in range(Constants.MAX_RETRIES):
             try:
                 # 发送 GET 请求
-                response = requests.get(url=url, headers=Constants.HEADERS, verify=False)
+                response = requests.get(url=text_url, headers=Constants.HEADERS, verify=False)
                 response.raise_for_status()  # 如果响应状态码不是 200，会抛出异常
                 break  # 如果请求成功，则跳出循环
             except Exception as e:
@@ -57,13 +72,16 @@ class ThreeWords:
             return
         draw = ImageDraw.Draw(image)
         # 显示文字
-        text_font = ImageFont.truetype(text_setting.font_type.lower(), text_setting.font_size)
+        # todo 字体不能直接支持
+        text_setting.font_family = "simkai.ttf"
+        text_font = ImageFont.truetype(text_setting.font_family.lower(), text_setting.font_size)
         text = data.hitokoto
         text_bbox = draw.textbbox((0, 0), text, font=text_font)
         # text_size[1] 高度
         # text_size[0] 宽度
         text_size = (text_bbox[2] - text_bbox[0], text_bbox[3] - text_bbox[1])
-        if text_setting.text_position == (-1, -1):
+        # todo 其他条件
+        if text_setting.text_position == "居中":
             # Calculate x and y coordinates for centering the text
             x = (image.width - text_size[0]) / 2
             y = (image.height - text_size[1]) / 2 - image.height * 0.10
@@ -72,9 +90,10 @@ class ThreeWords:
             y = text_setting.text_position[1]
         draw.text((x, y), text, fill=text_setting.font_color, font=text_font)
 
+        # todo 连同 文字出处一起考虑位置
         # 显示文字出处
         if text_setting.text_from:
-            from_font = ImageFont.truetype(text_setting.font_type.lower(), int(text_setting.font_size * 0.7))
+            from_font = ImageFont.truetype(text_setting.font_family.lower(), int(text_setting.font_size * 0.7))
             from_bbox = draw.textbbox((0, 0), "——「{}」".format(data.from_), font=from_font)
             from_size = (from_bbox[2] - from_bbox[0], from_bbox[3] - from_bbox[1])
 

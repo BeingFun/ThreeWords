@@ -12,7 +12,7 @@ from PyQt6.QtGui import QIcon
 from src.constants.constants import Constants
 
 
-class Ui_Form(QtWidgets.QMainWindow):
+class AboutWidget(QtWidgets.QMainWindow):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(800, 600)
