@@ -36,7 +36,6 @@ class ImageSettingInterface(GalleryInterface):
 
         # 自定义位置
         self.folerButton = PushButton(self.tr('选择文件夹'))
-
         # 设置背景图像来源
         comboBox = ComboBox()
         items_list = ['软件自带', '必应每日壁纸', '自定义背景图像文件夹']
@@ -44,8 +43,12 @@ class ImageSettingInterface(GalleryInterface):
             comboBox.addItem(self.tr(item))
 
         # 设置默认值
-        comboBox.setText(imagesetting.background_from)
-        comboBox.setCurrentIndex(items_list.index(imagesetting.background_from))
+        if imagesetting.background_from not in items_list:
+            comboBox.setText('自定义背景图像文件夹')
+            comboBox.setCurrentIndex(items_list.index("自定义背景图像文件夹"))
+        else:
+            comboBox.setText(imagesetting.background_from)
+            comboBox.setCurrentIndex(items_list.index(imagesetting.background_from))
         comboBox.currentTextChanged.connect(self.imageFrom)
         comboBox.setMinimumWidth(210)
         self.addExampleCard(
@@ -60,7 +63,10 @@ class ImageSettingInterface(GalleryInterface):
             self.folerButton,
             ''
         )
-        self.folerButton.setHidden(True)
+        if imagesetting.background_from not in items_list:
+            self.folerButton.setHidden(False)
+        else:
+            self.folerButton.setHidden(True)
 
     def showFileDialog(self):
         path = QFileDialog.getExistingDirectory()

@@ -9,7 +9,7 @@ from .gallery_interface import GalleryInterface
 from .basic_setting_interface import BasicSettingInterface
 from .image_setting_interface import ImageSettingInterface
 from .text_setting_interface import TextSettingInterface
-from ..common.config import cfg
+from ..common.windowsconfig import cfg
 from ..common.signal_bus import signalBus
 from ..common.translator import Translator
 from ..common import resource

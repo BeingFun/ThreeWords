@@ -1,9 +1,7 @@
 import json
-import os
 import time
 import requests
 from PIL import Image, ImageDraw, ImageFont
-import tkinter as tk
 from win32api import GetMonitorInfo, MonitorFromPoint
 
 from src.util.hitokoto import Hitokoto
@@ -15,7 +13,6 @@ class ThreeWords:
     """
     获取一言数据库响应，并格式化为 Hitokoto 类
     """
-
     @staticmethod
     def get_text():
         text_style = ConfigInit.config_init().text_setting.text_style
@@ -95,7 +92,6 @@ class ThreeWords:
                     xy = (x, y)
                     draw.text(xy, "——「{}」".format(data.from_), fill=text_setting.font_color, font=from_font,
                               anchor="lt")
-                # 计算句子坐标
                 xy = (work_width / 2, work_height / 2)
                 draw.text(xy, data.hitokoto, fill=text_setting.font_color, font=text_font,
                           anchor=anchor)
@@ -116,7 +112,6 @@ class ThreeWords:
                     xy = (x, y)
                     draw.text(xy, "——「{}」".format(data.from_), fill=text_setting.font_color, font=from_font,
                               anchor="lt")
-
                 xy = (0, work_height / 2)
                 draw.text(xy, data.hitokoto, fill=text_setting.font_color, font=text_font,
                           anchor="lm")
@@ -142,7 +137,6 @@ class ThreeWords:
                     xy = (x, y)
                     draw.text(xy, "——「{}」".format(data.from_), fill=text_setting.font_color, font=from_font,
                               anchor="lt")
-
                 xy = (work_width / 2, 0)
                 draw.text(xy, data.hitokoto, fill=text_setting.font_color, font=text_font,
                           anchor="mt")
@@ -208,8 +202,15 @@ class ThreeWords:
                           anchor=anchor)
             case _:
                 # 自定义位置,描点为水平左侧
-                x = int(text_setting.text_position.replace(" ", "").split(",")[0])
-                y = int(text_setting.text_position.replace(" ", "").split(",")[1])
+                split_symb = "," if "," in text_setting.text_position else "，"
+                x = int(text_setting.text_position.replace(" ", "").split(split_symb)[0])
+                y = int(text_setting.text_position.replace(" ", "").split(split_symb)[1])
                 xy = (x, y)
                 draw.text(xy, data.hitokoto, fill=text_setting.font_color, font=text_font)
+                if text_setting.text_from:
+                    x = x + text_width
+                    y = y + text_height
+                    draw.text(xy, "——「{}」".format(data.from_), fill=text_setting.font_color, font=from_font,
+                              anchor="lt")
+
         image.save(text_background)

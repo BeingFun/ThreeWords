@@ -51,8 +51,7 @@ def run_interrupt(break_flag, data):
             ThreeWords.add_text(data)
             ThreeImages.set_background()
             Config.REFRESH_ALL = False
-
-        time.sleep(0.1)
+        time.sleep(1)
     return break_flag, data
 
 

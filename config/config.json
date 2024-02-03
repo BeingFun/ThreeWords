@@ -1,1 +1,19 @@
-{"BASIC_SETTING": {"START_WITH_SYSTEM": "True", "UPDATE_PERIOD": "60"}, "IMAGE_SETTING": {"OPEN_IMAGE_UPDATE": "False", "BACKGROUND_IMAGES_FROM": "软件自带"}, "TEXT_SETTING": {"OPEN_TEXT_UPDATE": "True", "TEXT_STYLE": "文学&影视&诗词&网易云&哲学", "TEXT_FROM": "True", "TEXT_POSITION": "居中", "FONT_COLOR": "#ffffff", "FONT_SIZE": "60", "FONT_FAMILY": "楷体"}}
+{
+  "BASIC_SETTING": {
+    "START_WITH_SYSTEM": "True",
+    "UPDATE_PERIOD": "60"
+  },
+  "IMAGE_SETTING": {
+    "OPEN_IMAGE_UPDATE": "False",
+    "BACKGROUND_IMAGES_FROM": "软件自带"
+  },
+  "TEXT_SETTING": {
+    "OPEN_TEXT_UPDATE": "True",
+    "TEXT_STYLE": "诗词",
+    "TEXT_FROM": "False",
+    "TEXT_POSITION": "居中",
+    "FONT_COLOR": "#ffffff",
+    "FONT_SIZE": "60",
+    "FONT_FAMILY": "楷体"
+  }
+}

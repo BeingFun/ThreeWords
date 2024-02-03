@@ -3,9 +3,8 @@ import os
 import time
 import requests
 import json
-
 from PIL import Image
-import tkinter as tk
+from win32api import GetMonitorInfo, MonitorFromPoint
 
 from src.common.config import Config
 from src.util.config_init import ConfigInit
@@ -73,10 +72,8 @@ class ThreeImages:
         if dir_image_idx == len(images):
             dir_image_idx = 0
         # 图片大小调整、格式转换
-        root = tk.Tk()
-        screenwidth = root.winfo_screenwidth()
-        screenheight = root.winfo_screenheight()
-        root.destroy()
+        monitor_info = GetMonitorInfo(MonitorFromPoint((0, 0)))
+        __, __, screenwidth, screenheight = monitor_info.get("Monitor")
         image = Image.open(image_setting.background_from + "\\" + image_name)
         if image.size[0] != screenwidth or image.size != screenheight:
             image.resize((screenwidth, screenheight), resample=Image.LANCZOS)
@@ -88,13 +85,6 @@ class ThreeImages:
 
     @staticmethod
     def set_background():
-        # get text image path
-        # 如果没有cur_background名文件，则使用文件夹下按文件名排序的第一张图片
-        text_background = None
-        for image_name in os.listdir(Config.CUR_USE_IMAGE):
-            if "text_background" in image_name:
-                text_background = image_name
-                break
-        image_path = Config.CUR_USE_IMAGE + "\\" + text_background
+        image_path = Config.CUR_USE_IMAGE + "\\text_background.png"
         ctypes.windll.user32.SystemParametersInfoW(
             Config.SPI_SETDESKWALLPAPER, 0, image_path, 3)

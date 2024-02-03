@@ -56,7 +56,7 @@ class Config:
     # 检查更新
     GITHUB_API = "https://api.github.com/repos/BeingFun/ThreeWords"
     RELEASE_URL = "https://github.com/BeingFun/ThreeWords/releases/latest"
-    LAST_UPDATE = "2023-04-03T16:05:58Z"
+    LAST_UPDATE = "2024-02-04T13:37:53Z"
 
     # 实例变量
     REFRESH_TEXT = False

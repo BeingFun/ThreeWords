@@ -7,6 +7,8 @@ from qfluentwidgets import (qconfig, QConfig, ConfigItem, OptionsConfigItem, Boo
                             OptionsValidator, RangeConfigItem, RangeValidator,
                             FolderListValidator, Theme, FolderValidator, ConfigSerializer, __version__)
 
+from src.common.config import Config
+
 
 class Language(Enum):
     """ Language enumeration """
@@ -31,7 +33,7 @@ def isWin11():
     return sys.platform == 'win32' and sys.getwindowsversion().build >= 22000
 
 
-class Config(QConfig):
+class WindowsConfig(QConfig):
     """ Config of application """
     # main window
     micaEnabled = ConfigItem("MainWindow", "MicaEnabled", isWin11(), BoolValidator())
@@ -52,6 +54,6 @@ EXAMPLE_URL = "https://github.com/BeingFun/ThreeWords"
 FEEDBACK_URL = "https://github.com/BeingFun/ThreeWords/issues"
 RELEASE_URL = "https://github.com/BeingFun/ThreeWords/releases/latest"
 
-cfg = Config()
+cfg = WindowsConfig()
 cfg.themeMode.value = Theme.AUTO
-qconfig.load('config/window_config.json', cfg)
+qconfig.load(Config.CONFIG_PATH + "window_config.json", cfg)
