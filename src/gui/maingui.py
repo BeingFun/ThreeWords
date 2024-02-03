@@ -2,7 +2,7 @@ import sys
 from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QMainWindow
 from PyQt6.QtGui import QIcon, QAction
 
-from src.constants.constants import Constants
+from src.common.config import Config
 from src.util.config_init import ConfigInit
 from src.util.file_tools import FileTools
 from src.gui.aboutui import AboutWidget
@@ -11,17 +11,17 @@ from src.gui.view.main_window import MainWindow
 
 def tray_ui_config():
     if ConfigInit.config_init().text_setting.open_text_update:
-        open_text_icon = Constants.ICON_PATH + "switch_on.ico"
+        open_text_icon = Config.ICON_PATH + "switch_on.ico"
         enable_update_text = True
     else:
-        open_text_icon = Constants.ICON_PATH + "switch_off.ico"
+        open_text_icon = Config.ICON_PATH + "switch_off.ico"
         enable_update_text = False
 
     if ConfigInit.config_init().image_setting.open_image_update:
-        open_image_icon = Constants.ICON_PATH + "switch_on.ico"
+        open_image_icon = Config.ICON_PATH + "switch_on.ico"
         enable_update_image = True
     else:
-        open_image_icon = Constants.ICON_PATH + "switch_off.ico"
+        open_image_icon = Config.ICON_PATH + "switch_off.ico"
         enable_update_image = False
     return open_text_icon, enable_update_text, open_image_icon, enable_update_image
 
@@ -33,8 +33,8 @@ def tray_ui_config():
     enable_update_image,
 ) = tray_ui_config()
 
-switch_on_icon = Constants.ICON_PATH + "switch_on.ico"
-switch_off_icon = Constants.ICON_PATH + "switch_off.ico"
+switch_on_icon = Config.ICON_PATH + "switch_on.ico"
+switch_off_icon = Config.ICON_PATH + "switch_off.ico"
 
 
 class MyWindow(QMainWindow):
@@ -44,7 +44,7 @@ class MyWindow(QMainWindow):
 
     def InitTrayMenuUI(self):
         self.tray_icon = QSystemTrayIcon()
-        tray_icon = QIcon(Constants.ICON_PATH + "logo.ico")
+        tray_icon = QIcon(Config.ICON_PATH + "logo.ico")
         self.tray_icon.setIcon(tray_icon)
         self.cur_open_text_icon = open_text_icon
         self.cur_open_image_icon = open_image_icon
@@ -60,16 +60,16 @@ class MyWindow(QMainWindow):
         self.open_image_update = QAction(
             QIcon(self.cur_open_image_icon), "开启图像更新")
         self.update_text = QAction(
-            QIcon(Constants.ICON_PATH + "text.ico"), "立即更新文字")
+            QIcon(Config.ICON_PATH + "text.ico"), "立即更新文字")
         self.update_image = QAction(
-            QIcon(Constants.ICON_PATH + "image.ico"), "立即更新图像")
+            QIcon(Config.ICON_PATH + "image.ico"), "立即更新图像")
         self.update_all = QAction(
-            QIcon(Constants.ICON_PATH + "select_all.ico"), "立即更新全部"
+            QIcon(Config.ICON_PATH + "select_all.ico"), "立即更新全部"
         )
         self.setting = QAction(
-            QIcon(Constants.ICON_PATH + "setting.ico"), "设置")
-        self.about = QAction(QIcon(Constants.ICON_PATH + "about.ico"), "关于")
-        self.exit = QAction(QIcon(Constants.ICON_PATH + "quit.ico"), "退出")
+            QIcon(Config.ICON_PATH + "setting.ico"), "设置")
+        self.about = QAction(QIcon(Config.ICON_PATH + "about.ico"), "关于")
+        self.exit = QAction(QIcon(Config.ICON_PATH + "quit.ico"), "退出")
 
         # enable menu item
         update_text_flag = ConfigInit.config_init().text_setting.open_text_update
@@ -102,7 +102,7 @@ class MyWindow(QMainWindow):
         self.exit.triggered.connect(self.quit)
 
         # 设置菜单UI
-        style_file = Constants.ROOT_PATH + "/resources/qss/tray_menu.qss"
+        style_file = Config.ROOT_PATH + "/resources/qss/tray_menu.qss"
         with open(style_file, "r", encoding="utf-8") as f:
             style_sheet = f.read()
         self.tray_menu.setStyleSheet(style_sheet)
@@ -134,13 +134,13 @@ class MyWindow(QMainWindow):
         self.createTrayMenu()
 
     def refresh_text(self):
-        Constants.REFRESH_TEXT = True
+        Config.REFRESH_TEXT = True
 
     def refresh_image(self):
-        Constants.REFRESH_IMAGE = True
+        Config.REFRESH_IMAGE = True
 
     def refresh_all(self):
-        Constants.REFRESH_ALL = True
+        Config.REFRESH_ALL = True
 
     def open_setting(self):
         settingwindow = MainWindow()

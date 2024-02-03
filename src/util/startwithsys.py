@@ -1,10 +1,10 @@
 import winreg
 
-from src.constants.constants import Constants
+from src.common.config import Config
 from src.util.config_init import ConfigInit
 
 program_name = "ThreeWords"
-program_path = Constants.ROOT_PATH + r"\bin\ThreeWords.exe"
+program_path = Config.ROOT_PATH + r"\bin\ThreeWords.exe"
 program_para = "-hidden"
 
 

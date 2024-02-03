@@ -1,10 +1,10 @@
 # coding:utf-8
 from PyQt6.QtCore import Qt
-from qfluentwidgets import SwitchButton, TreeWidget, ComboBox, LineEdit, ColorDialog, PushButton
-from PyQt6.QtWidgets import QFrame, QTreeWidgetItem, QHBoxLayout, QTreeWidgetItemIterator, QFontDialog
+from qfluentwidgets import SwitchButton, TreeWidget, ComboBox, LineEdit, ColorDialog, PushButton, SpinBox
+from PyQt6.QtWidgets import QFrame, QTreeWidgetItem, QHBoxLayout, QTreeWidgetItemIterator
 
-from util.config_init import ConfigInit
-from util.file_tools import FileTools
+from src.util.config_init import ConfigInit
+from src.util.file_tools import FileTools
 from .gallery_interface import GalleryInterface
 from ..common.translator import Translator
 from ..common.style_sheet import StyleSheet
@@ -24,11 +24,11 @@ class TextSettingInterface(GalleryInterface):
         self.parent_key = "TEXT_SETTING"
 
         # 加载配置文件
-        textsetting = ConfigInit.config_init().text_setting
+        text_setting = ConfigInit.config_init().text_setting
 
         # 开启文字自动更新
         switchButton = SwitchButton()
-        switchButton.setChecked(True if textsetting.open_text_update else False)
+        switchButton.setChecked(True if text_setting.open_text_update else False)
         switchButton.checkedChanged.connect(self.openTextUpdate)
         self.addExampleCard(
             self.tr("开启文字定时更新"),
@@ -47,7 +47,8 @@ class TextSettingInterface(GalleryInterface):
 
         # 显示文字出处
         switchButton = SwitchButton()
-        switchButton.setChecked(True if textsetting.text_from else False)
+        # switchButton.set
+        switchButton.setChecked(True if text_setting.text_from else False)
         switchButton.checkedChanged.connect(self.textFrom)
         self.addExampleCard(
             title=self.tr('显示文字出处'),
@@ -64,26 +65,49 @@ class TextSettingInterface(GalleryInterface):
             ''
         )
 
-        # 设置字体大小及类型
-        buttonFont = PushButton(self.tr('选择字体及大小'))
-        buttonFont.clicked.connect(self.showFontDialog)
+        # 文字字体
+        comboBox = ComboBox()
+        # 从配置文件加载系统字体列表
+        for item in text_setting.font_dict.keys():
+            comboBox.addItem(item)
+        # 设置默认值
+        comboBox.setText(text_setting.font_family)
+        comboBox.setCurrentIndex(0)
+        comboBox.currentTextChanged.connect(self.fontFamily)
+
+        comboBox.setMinimumWidth(210)
         self.addExampleCard(
-            self.tr('字体类型及大小'),
-            buttonFont,
+            self.tr('字体选择'),
+            comboBox,
+            ''
+        )
+
+        # 文字大小
+        fontSize = SpinBox()
+        fontSize.setValue(text_setting.font_size)
+        fontSize.valueChanged.connect(self.fontSize)
+        self.addExampleCard(
+            self.tr('字体大小'),
+            fontSize,
             ''
         )
 
         # 文字在屏幕中的位置
         comboBox = ComboBox()
-        comboBox.setText(textsetting.text_position)
-        comboBox.addItems([
-            self.tr('居中'),
-            self.tr('右下'),
-            self.tr("左下"),
-            self.tr('左上'),
-            self.tr("右上"),
-            self.tr("自定义位置")
-        ])
+        items_list = ['居中',
+                      '左侧顶部',
+                      "左侧中部",
+                      '左侧底部',
+                      "中间顶部",
+                      "中间底部",
+                      '右侧顶部',
+                      "右侧中部",
+                      '右侧底部',
+                      "自定义位置", ]
+        for item in items_list:
+            comboBox.addItem(self.tr(item))
+        comboBox.setCurrentIndex(items_list.index(text_setting.text_position))
+        comboBox.setText(text_setting.text_position)
         comboBox.setMinimumWidth(210)
         comboBox.currentTextChanged.connect(self.selectPos)
         self.addExampleCard(
@@ -107,14 +131,6 @@ class TextSettingInterface(GalleryInterface):
         w = ColorDialog(Qt.GlobalColor.cyan, self.tr('Choose color'), self.window())
         w.colorChanged.connect(lambda c: FileTools.dump_config(self.parent_key, "FONT_COLOR", c.name()))
         w.exec()
-
-    def showFontDialog(self):
-        font, ok = QFontDialog.getFont()
-        if ok:
-            FileTools.dump_config(self.parent_key, "FONT_SIZE", font.pointSize())
-            FileTools.dump_config(self.parent_key, "FONT_FAMILY", font.family())
-            FileTools.dump_config(self.parent_key, "FONT_ITALIC", font.italic())
-            FileTools.dump_config(self.parent_key, "FONT_BOLD", font.bold())
 
     def openTextUpdate(self, value):
         key = "OPEN_TEXT_UPDATE"
@@ -153,6 +169,12 @@ class TextSettingInterface(GalleryInterface):
         else:
             self.textEdit.setHidden(True)
         FileTools.dump_config(self.parent_key, key, value)
+
+    def fontFamily(self, value):
+        FileTools.dump_config(self.parent_key, "FONT_FAMILY", value)
+
+    def fontSize(self, value):
+        FileTools.dump_config(self.parent_key, "FONT_SIZE", value)
 
     def userPos(self):
         key = "TEXT_POSITION"

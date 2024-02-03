@@ -9,7 +9,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtGui import QIcon
 
-from src.constants.constants import Constants
+from src.common.config import Config
 
 
 class AboutWidget(QtWidgets.QMainWindow):
@@ -47,7 +47,7 @@ class AboutWidget(QtWidgets.QMainWindow):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        window_icon = Constants.ICON_PATH + "about.ico"
+        window_icon = Config.ICON_PATH + "about.ico"
         Form.setWindowIcon(QIcon(window_icon))
         Form.setWindowTitle(_translate("Form", "About ThreeWords"))
         self.label_1.setText(_translate("Form", "这可能是个总是说废话的程序"))

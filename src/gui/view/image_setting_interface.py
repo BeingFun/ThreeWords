@@ -2,8 +2,8 @@
 from PyQt6.QtWidgets import QFileDialog
 from qfluentwidgets import (PushButton, SwitchButton, ComboBox)
 
-from util.config_init import ConfigInit
-from util.file_tools import FileTools
+from src.util.config_init import ConfigInit
+from src.util.file_tools import FileTools
 from ..common.translator import Translator
 from .gallery_interface import GalleryInterface
 
@@ -39,13 +39,14 @@ class ImageSettingInterface(GalleryInterface):
 
         # 设置背景图像来源
         comboBox = ComboBox()
+        items_list = ['软件自带', '必应每日壁纸', '自定义背景图像文件夹']
+        for item in items_list:
+            comboBox.addItem(self.tr(item))
+
+        # 设置默认值
         comboBox.setText(imagesetting.background_from)
+        comboBox.setCurrentIndex(items_list.index(imagesetting.background_from))
         comboBox.currentTextChanged.connect(self.imageFrom)
-        comboBox.addItems([
-            self.tr('软件自带'),
-            self.tr('必应每日壁纸'),
-            self.tr('自定义背景图像文件夹')
-        ])
         comboBox.setMinimumWidth(210)
         self.addExampleCard(
             self.tr('背景图像来源'),

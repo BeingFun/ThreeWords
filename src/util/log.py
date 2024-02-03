@@ -1,13 +1,13 @@
 import os
 from datetime import datetime
 
-from src.constants.constants import Constants
+from src.common.config import Config
 
 
 class Log:
     @staticmethod
     def save_log(content: str = ""):
-        file_path = Constants.ROOT_PATH + r"\Error.log"
+        file_path = Config.ROOT_PATH + r"\Error.log"
         print(file_path)
         if not os.path.exists(file_path):
             with open(file_path, "x"):

@@ -5,18 +5,18 @@ import zipfile
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.constants.constants import Constants
+from src.common.config import Config
 
 if __name__ == '__main__':
     print("#" * 60)
     print("start deploy...")
     # 创建 package_folder
     package_folder = "ThreeWords"
-    need_copy_folder = ['bin', 'config', 'resources', 'images']
-    need_copy_file = ['readme.md', 'changelog.md', "readme.pdf"]
+    need_copy_folder = ['bin', 'config', 'resources']
+    need_copy_file = ['readme.md', 'changelog.md']
 
     # 切换到根目录
-    os.chdir(Constants.ROOT_PATH)
+    os.chdir(Config.ROOT_PATH)
 
     # 将bin、config文件夹中所有内容拷贝到 threewords 中
     for folder in need_copy_folder:

@@ -1,6 +1,7 @@
 import json
 
-from src.constants.constants import Constants
+from src.common.config import Config
+from .get_font_dict import get_font_dict
 
 
 class ImageSetting:
@@ -10,15 +11,15 @@ class ImageSetting:
 
 
 class TextSetting:
-    def __init__(self, open_text_update, font_color, font_size, font_family, font_italic, font_bold, text_style,
-                 text_form,
-                 text_position):
+    def __init__(self, open_text_update: bool, font_color: str, font_size: int, font_family: str, font_dict: dict,
+                 text_style: str,
+                 text_form: bool,
+                 text_position: str):
         self.open_text_update = open_text_update
         self.font_color = font_color
         self.font_size = font_size
         self.font_family = font_family
-        self.font_italic = font_italic
-        self.font_bold = font_bold
+        self.font_dict = font_dict
         self.text_style = text_style
         self.text_from = text_form
         self.text_position = text_position
@@ -40,7 +41,9 @@ class Setting:
 class ConfigInit:
     @staticmethod
     def config_init() -> Setting:
-        config_path = Constants.ROOT_PATH + r"\config\config.json"
+        # 所用变量都从文件加载,配置实时生效
+        font_dict = get_font_dict()
+        config_path = Config.ROOT_PATH + r"\config\config.json"
         with open(config_path, "r", encoding="utf-8") as load_file:
             config_dict = json.load(load_file)
 
@@ -62,17 +65,15 @@ class ConfigInit:
         font_color = config_dict['TEXT_SETTING']['FONT_COLOR']
         position = config_dict['TEXT_SETTING']['TEXT_POSITION']
         text_style = config_dict['TEXT_SETTING']['TEXT_STYLE']
-        text_from = config_dict["TEXT_SETTING"]['TEXT_FROM']
+        text_from = config_dict["TEXT_SETTING"]['TEXT_FROM'] == "True"
         text_setting = TextSetting(
             open_text_update=open_text_update,
             font_color=font_color,
             font_size=int(config_dict['TEXT_SETTING']['FONT_SIZE']),
             font_family=config_dict['TEXT_SETTING']['FONT_FAMILY'],
-            font_italic=config_dict["TEXT_SETTING"]["FONT_ITALIC"],
-            font_bold=config_dict["TEXT_SETTING"]["FONT_BOLD"],
+            font_dict=font_dict,
             text_position=position,
             text_style=text_style,
             text_form=text_from)
-
         setting = Setting(base_setting=base_setting, image_setting=image_setting, text_setting=text_setting)
         return setting

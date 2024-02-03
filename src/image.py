@@ -1,15 +1,17 @@
 import ctypes
 import os
 import time
-import shutil
 import requests
 import json
 
-from src.constants.constants import Constants
+from PIL import Image
+import tkinter as tk
+
+from src.common.config import Config
 from src.util.config_init import ConfigInit
 from src.util.file_tools import FileTools
 
-# 由于微软必应壁纸8张，所以循环从-1到7循环
+# 由于微软必应壁纸api 提供8张可查询图片,所以循环从 -1 到 7 循环
 bing_image_idx = 0
 dir_image_idx = 0
 
@@ -24,25 +26,24 @@ class ThreeImages:
             n(必须):           返回数量,可选范围 [1,8]
             mkt(非必须):       地区; zh-CN:中国 ...
         """
-        for i in range(Constants.MAX_RETRIES):
+        for i in range(Config.MAX_RETRIES):
             try:
                 global bing_image_idx
-                FileTools.make_folder_s(Constants.BING_BACKGROUD)
+                FileTools.make_folder_s(Config.BING_BACKGROUD)
                 idx = bing_image_idx
-                url = Constants.BING_URL + "?format=js&idx={}&n={}".format(idx, num)
-                response = requests.get(url, headers=Constants.HEADERS)
+                url = Config.BING_URL + "?format=js&idx={}&n={}".format(idx, num)
+                response = requests.get(url, headers=Config.HEADERS)
                 response.raise_for_status()  # 如果响应状态码不是 200，会抛出异常
                 response.encoding = 'utf8'
                 jsonData = json.loads(response.text)
                 image_url = jsonData['images'][0]['url']
                 # 获取图像与信息
-                image_response = requests.get("https://s.cn.bing.net/" + image_url, headers=Constants.HEADERS)
+                image_response = requests.get("https://s.cn.bing.net/" + image_url, headers=Config.HEADERS)
                 image_response.raise_for_status()  # 如果响应状态码不是 200，会抛出异常
                 image_content = image_response.content
                 image_desc = str(jsonData['images'][0]['copyright']).split("(©")[0]
-                # image_title = str(jsonData['images'][0]['title'])
                 image_date = jsonData['images'][0]['fullstartdate']
-                image_path = Constants.BING_BACKGROUD + fr"\{image_date}_{image_desc}.jpg"
+                image_path = Config.BING_BACKGROUD + fr"\{image_date}_{image_desc}.jpg"
                 with open(image_path, "w"):
                     pass
                 with open(image_path, "wb") as file:
@@ -52,9 +53,9 @@ class ThreeImages:
                     bing_image_idx = -1
                 break
             except Exception as e:
-                print(f'Retry {i + 1}/{Constants.MAX_RETRIES}: {e}')
+                print(f'Retry {i + 1}/{Config.MAX_RETRIES}: {e}')
                 time.sleep(60)
-                if i == Constants.MAX_RETRIES - 1:
+                if i == Config.MAX_RETRIES - 1:
                     raise e
 
     @staticmethod
@@ -63,31 +64,37 @@ class ThreeImages:
         image_setting = ConfigInit.config_init().image_setting
         if image_setting.background_from == "必应每日壁纸":
             ThreeImages.get_bing_images()
-            image_setting.background_from = Constants.BING_BACKGROUD
+            image_setting.background_from = Config.BING_BACKGROUD
         elif image_setting.background_from == "软件自带":
-            image_setting.background_from = Constants.DEFAULT_BACKGROUD
+            image_setting.background_from = Config.DEFAULT_BACKGROUD
         images = os.listdir(image_setting.background_from)
-        image = images[dir_image_idx]
+        image_name = images[dir_image_idx]
         dir_image_idx += 1
         if dir_image_idx == len(images):
             dir_image_idx = 0
-        # Copy the random image to the new image set folder
-        src_path = image_setting.background_from + "\\" + image
-        FileTools.make_folder_s(Constants.CUR_IMAGE)
-        origin_image = "cur_use." + image.split(".")[1]
-        dst_path = Constants.IMAGES_PATH + r"\\cur use\\" + origin_image
-        shutil.copy2(src_path, dst_path)
+        # 图片大小调整、格式转换
+        root = tk.Tk()
+        screenwidth = root.winfo_screenwidth()
+        screenheight = root.winfo_screenheight()
+        root.destroy()
+        image = Image.open(image_setting.background_from + "\\" + image_name)
+        if image.size[0] != screenwidth or image.size != screenheight:
+            image.resize((screenwidth, screenheight), resample=Image.LANCZOS)
+        if image_name.split(".")[1].lower() not in Config.IMAGE_LLF_LIST:
+            image.convert("RGBA")
+        if not os.path.exists(Config.CUR_USE_IMAGE):
+            os.makedirs(Config.CUR_USE_IMAGE)
+        image.save(Config.CUR_USE_IMAGE + "\\cur_use.png")
 
     @staticmethod
-    def set_backgroud():
+    def set_background():
         # get text image path
         # 如果没有cur_background名文件，则使用文件夹下按文件名排序的第一张图片
         text_background = None
-        for image_name in os.listdir(Constants.CUR_IMAGE):
+        for image_name in os.listdir(Config.CUR_USE_IMAGE):
             if "text_background" in image_name:
                 text_background = image_name
                 break
-        image_path = Constants.CUR_IMAGE + "\\" + text_background
-        # Set the desktop background to the image path
+        image_path = Config.CUR_USE_IMAGE + "\\" + text_background
         ctypes.windll.user32.SystemParametersInfoW(
-            Constants.SPI_SETDESKWALLPAPER, 0, image_path, 3)
+            Config.SPI_SETDESKWALLPAPER, 0, image_path, 3)

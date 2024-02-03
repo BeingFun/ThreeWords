@@ -5,7 +5,7 @@ from PyInstaller.__main__ import run
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.constants.constants import Constants
+from src.common.config import Config
 
 CUR_PATH = os.path.dirname(os.path.abspath(__file__))
 # 参数列表 https://www.cnblogs.com/hushaojun/p/16787445.html
@@ -15,9 +15,9 @@ if __name__ == '__main__':
     print("start compile...")
 
     version = "release"
-    threewords_path = Constants.ROOT_PATH + r'\src\\main.py'
-    performable_path = Constants.ROOT_PATH + r'\bin'
-    icon_file_path = Constants.ROOT_PATH + r'\resources\ico\logo.ico'
+    threewords_path = Config.ROOT_PATH + r'\src\\main.py'
+    performable_path = Config.ROOT_PATH + r'\bin'
+    icon_file_path = Config.ROOT_PATH + r'\resources\ico\logo.ico'
     work_path = CUR_PATH + r'\threewords_build'
     # 打包 PyInstaller 未识别的库
     hidden_import = "plyer.platforms.win.notification"

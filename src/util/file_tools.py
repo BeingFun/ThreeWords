@@ -2,7 +2,7 @@ import json
 import shutil
 import os
 
-from src.constants.constants import Constants
+from src.common.config import Config
 
 
 class FileTools:
@@ -60,7 +60,7 @@ class FileTools:
 
     @staticmethod
     def dump_config(parent_key: str, key: str, value):
-        config_path = Constants.ROOT_PATH + r"\config\config.json"
+        config_path = Config.ROOT_PATH + r"\config\config.json"
         with open(config_path, "r", encoding="utf-8") as load_file:
             config_dict = json.load(load_file)
         config_dict[parent_key][key] = str(value)

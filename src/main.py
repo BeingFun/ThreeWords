@@ -1,7 +1,7 @@
 import sys
 import time
 
-from src.constants.constants import Constants
+from src.common.config import Config
 from src.image import ThreeImages
 from src.text import ThreeWords
 from src.util.config_init import ConfigInit
@@ -23,36 +23,36 @@ def run_normal(break_flag, data):
         else:
             data = None
         ThreeWords.add_text(data)
-        ThreeImages.set_backgroud()
+        ThreeImages.set_background()
     return data
 
 
 def run_interrupt(break_flag, data):
     for i in range(ConfigInit.config_init().base_setting.update_period * 60):
-        if Constants.REFRESH_TEXT:
+        if Config.REFRESH_TEXT:
             data = ThreeWords.get_text()
             ThreeWords.add_text(data)
-            ThreeImages.set_backgroud()
+            ThreeImages.set_background()
             break_flag = True
-            Constants.REFRESH_TEXT = False
+            Config.REFRESH_TEXT = False
             break
-        elif Constants.REFRESH_IMAGE:
+        elif Config.REFRESH_IMAGE:
             ThreeImages.get_image()
             if ConfigInit.config_init().text_setting.open_text_update is False:
                 data = None
             ThreeWords.add_text(data)
-            ThreeImages.set_backgroud()
-            Constants.REFRESH_IMAGE = False
+            ThreeImages.set_background()
+            Config.REFRESH_IMAGE = False
             break_flag = True
             break
-        elif Constants.REFRESH_ALL:
+        elif Config.REFRESH_ALL:
             data = ThreeWords.get_text()
             ThreeImages.get_image()
             ThreeWords.add_text(data)
-            ThreeImages.set_backgroud()
-            Constants.REFRESH_ALL = False
+            ThreeImages.set_background()
+            Config.REFRESH_ALL = False
 
-        time.sleep(1)
+        time.sleep(0.1)
     return break_flag, data
 
 
@@ -109,6 +109,7 @@ if __name__ == "__main__":
                 # 当文字更新失败时，仅通知用户，重新拉起失败线程
                 # raise task.exception
                 Notification.send_notification(str(task.exception))
+                time.sleep(300)
                 thread_list.remove(task)
                 new_thread = ExcThread(target=task.target, name=task.name)
                 new_thread.start()
