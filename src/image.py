@@ -68,10 +68,10 @@ class ThreeImages:
         elif image_setting.background_from == "软件自带":
             image_setting.background_from = Config.DEFAULT_BACKGROUD
         images = os.listdir(image_setting.background_from)
+        if dir_image_idx >= len(images):
+            dir_image_idx = 0
         image_name = images[dir_image_idx]
         dir_image_idx += 1
-        if dir_image_idx == len(images):
-            dir_image_idx = 0
         # 图片大小调整、格式转换
         monitor_info = GetMonitorInfo(MonitorFromPoint((0, 0)))
         __, __, screenwidth, screenheight = monitor_info.get("Monitor")
