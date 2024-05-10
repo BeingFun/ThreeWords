@@ -3,7 +3,6 @@ import time
 import requests
 from PIL import Image, ImageDraw, ImageFont
 from win32api import GetMonitorInfo, MonitorFromPoint
-from urllib.request import getproxies
 
 from src.util.hitokoto import Hitokoto
 from src.common.config import Config
@@ -37,9 +36,7 @@ class ThreeWords:
         for i in range(Config.MAX_RETRIES):
             try:
                 # 发送 GET 请求
-                proxies = getproxies()
-                proxies["https"] = proxies["http"]  # 代理服务器只支持http协议的情况
-                response = requests.get(url=text_url, headers=Config.HEADERS, proxies=proxies)
+                response = requests.get(url=text_url, headers=Config.HEADERS, proxies={})
                 response.raise_for_status()  # 如果响应状态码不是 200，会抛出异常
                 break  # 如果请求成功，则跳出循环
             except Exception as e:
