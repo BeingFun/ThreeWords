@@ -79,7 +79,8 @@ class BasicSettingInterface(GalleryInterface):
             button.setText("懒死了你🤧 x" + str(countNum))
 
         config = Config()
-        all_info = requests.get(config.GITHUB_API, proxies={}).json()
+        proxy = {"http": None, "https": None}
+        all_info = requests.get(config.GITHUB_API, proxies=proxy).json()
         cur_update = all_info['updated_at']
         pos = TeachingTipTailPosition.LEFT_BOTTOM
         if config.LAST_UPDATE < cur_update:

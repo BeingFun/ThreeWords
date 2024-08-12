@@ -31,14 +31,16 @@ class ThreeImages:
                 FileTools.make_folder_s(Config.BING_BACKGROUD)
                 idx = bing_image_idx
                 url = Config.BING_URL + "?format=js&idx={}&n={}".format(idx, num)
-                response = requests.get(url, headers=Config.HEADERS, proxies={})
+                # 不使用系统代理
+                proxy = {"http": None, "https": None}
+                response = requests.get(url, headers=Config.HEADERS, proxies=proxy)
                 response.raise_for_status()  # 如果响应状态码不是 200，会抛出异常
                 response.encoding = 'utf8'
                 jsonData = json.loads(response.text)
                 image_url = jsonData['images'][0]['url']
                 # 获取图像与信息
                 image_response = requests.get("https://s.cn.bing.net/" + image_url, headers=Config.HEADERS,
-                                              proxies={})
+                                              proxies=proxy)
                 image_response.raise_for_status()  # 如果响应状态码不是 200，会抛出异常
                 image_content = image_response.content
                 image_desc = str(jsonData['images'][0]['copyright']).split("(©")[0]

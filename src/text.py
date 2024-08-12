@@ -36,7 +36,9 @@ class ThreeWords:
         for i in range(Config.MAX_RETRIES):
             try:
                 # 发送 GET 请求
-                response = requests.get(url=text_url, headers=Config.HEADERS, proxies={})
+                # 不使用系统代理
+                proxy = {"http": None, "https": None}
+                response = requests.get(url=text_url, headers=Config.HEADERS, proxies=proxy)
                 response.raise_for_status()  # 如果响应状态码不是 200，会抛出异常
                 break  # 如果请求成功，则跳出循环
             except Exception as e:
