@@ -4,8 +4,8 @@
     "UPDATE_PERIOD": "60"
   },
   "IMAGE_SETTING": {
-    "OPEN_IMAGE_UPDATE": "False",
-    "BACKGROUND_IMAGES_FROM": "软件自带"
+    "OPEN_IMAGE_UPDATE": "True",
+    "BACKGROUND_IMAGES_FROM": "必应每日壁纸"
   },
   "TEXT_SETTING": {
     "OPEN_TEXT_UPDATE": "True",
